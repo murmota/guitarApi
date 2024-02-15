@@ -20,6 +20,6 @@ public class HibernateUtil {
 
     public static void close(){
         getSessionFactory().close();
-    }
+    }//
 
 }
