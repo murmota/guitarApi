@@ -1,5 +1,7 @@
-package com.example.guitarApi.modules.entities.productEntities;
+package com.example.guitarApi.modules.entities.productEntities.MusicalInstrument;
 
+import com.example.guitarApi.modules.entities.productEntities.GuitarType;
+import com.example.guitarApi.modules.entities.productEntities.SpareParts.String;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,9 +9,9 @@ import lombok.Data;
 @Data
 @Table(name = "Guitars", schema = "public", catalog = "postgres")
 public class Guitars implements IGuitar{
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long ID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
     @Column(name = "Name")
     private String Name;
     @Column(name = "Company")
@@ -24,6 +26,7 @@ public class Guitars implements IGuitar{
     private double Price;
     @Column(name = "Description")
     private String Description;
+    @Enumerated(EnumType.STRING)
     @Column(name = "GuitarType")
-    private GuitarType GuitarType;
+    private GuitarType guitarType;
 }
