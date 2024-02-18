@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "Sling", schema = "public", catalog = "postgres")
 public class Sling {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

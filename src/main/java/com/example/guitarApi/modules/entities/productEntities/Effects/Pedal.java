@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "Pedal", schema = "public", catalog = "postgres")
 public class Pedal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

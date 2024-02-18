@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "CareCoating", schema = "public", catalog = "postgres")
 public class CareCoating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

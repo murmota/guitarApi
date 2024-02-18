@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "Threshold", schema = "public", catalog = "postgres")
 public class Threshold {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

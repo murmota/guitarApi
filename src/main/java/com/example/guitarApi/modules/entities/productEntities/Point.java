@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "Point", schema = "public", catalog = "postgres")
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,7 @@
 package com.example.guitarApi.modules.entities.productEntities.MusicalInstrument;
 
 import com.example.guitarApi.modules.entities.productEntities.GuitarType;
-import com.example.guitarApi.modules.entities.productEntities.SpareParts.String;
+import com.example.guitarApi.modules.entities.productEntities.SpareParts.Strings;
 import jakarta.persistence.*;
 import lombok.Data;
 

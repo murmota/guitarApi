@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Data
+@Table(name = "ComboAmplifier", schema = "public", catalog = "postgres")
 public class ComboAmplifier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,7 +6,8 @@ import lombok.Data;
 
 @Entity
 @Data
-public class String {
+@Table(name = "Strings", schema = "public", catalog = "postgres")
+public class Strings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

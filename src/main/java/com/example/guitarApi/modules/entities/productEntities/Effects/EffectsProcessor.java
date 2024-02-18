@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "EffectsProcessor", schema = "public", catalog = "postgres")
 public class EffectsProcessor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 @Configuration
 public class DataConfiguration {
     private final SessionFactory sessionFactory;
@@ -18,5 +17,6 @@ public class DataConfiguration {
     public DataAccessLayer dataAccessLayer(){
         return new DataAccessLayer(sessionFactory);
     }
+
 }
 

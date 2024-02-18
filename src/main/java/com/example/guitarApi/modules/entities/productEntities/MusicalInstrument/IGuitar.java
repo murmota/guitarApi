@@ -1,7 +1,6 @@
 package com.example.guitarApi.modules.entities.productEntities.MusicalInstrument;
 
 import com.example.guitarApi.modules.entities.productEntities.GuitarType;
-import com.example.guitarApi.modules.entities.productEntities.SpareParts.String;
 
 public interface IGuitar {
     public Long getId();

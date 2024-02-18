@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 @Entity
 @Data
+@Table(name = "Tuner", schema = "public", catalog = "postgres")
 public class Tuner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
