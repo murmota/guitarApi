@@ -1,4 +1,4 @@
-package com.example.guitarApi.modules.entities.productEntities;
+package com.example.guitarApi.modules.entities.productEntities.UsersPackage;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,11 +11,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "Name")
-    private java.lang.String name;
+    private String name;
     @Column(name = "Email")
-    private java.lang.String email;
+    private String email;
     @Column(name = "Password")
-    private java.lang.String password;
+    private String password;
     @Column(name = "PhoneNumber")
-    private java.lang.String phoneNumber;
+    private String phoneNumber;
 }

@@ -1,4 +1,4 @@
-package com.example.guitarApi.modules.entities.productEntities;
+package com.example.guitarApi.modules.entities.productEntities.UsersPackage;
 
 import jakarta.persistence.*;
 import lombok.Data;

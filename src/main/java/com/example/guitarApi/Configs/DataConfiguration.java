@@ -1,7 +1,5 @@
 package com.example.guitarApi.Configs;
-
 import com.example.guitarApi.dal.DataAccessLayer;
-
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
