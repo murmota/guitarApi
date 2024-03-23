@@ -1,5 +1,6 @@
 package com.example.guitarApi.modules.entities.productEntities.sevice;
 
+import com.example.guitarApi.modules.entities.productEntities.UsersPackage.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,14 +13,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "UserId")
-    private Long userId;
-    @Column(name = "ProductId")
-    private Long productId;
     @Column(name = "Status")
     private boolean status;
-    @Column(name = "TotalPrice")
-    private double totalPrice;
-    @Column(name = "Date")
-    private Date  date;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

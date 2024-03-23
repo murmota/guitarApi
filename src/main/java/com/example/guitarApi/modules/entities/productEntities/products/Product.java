@@ -10,6 +10,8 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "articul")
+    private int articul;
     @Column(name = "Name")
     private String name;
     @Column(name = "Company")
@@ -36,6 +38,4 @@ public class Product {
     private int StringQuantity;
     @Column(name = "Color")
     private String Color;
-    @Column(name = "ProductType")
-    private com.example.guitarApi.modules.entities.productEntities.Enums.ProductType ProductType;
 }

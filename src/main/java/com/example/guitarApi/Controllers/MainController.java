@@ -1,6 +1,7 @@
 package com.example.guitarApi.Controllers;
 import com.example.guitarApi.dal.DataAccessLayer;
 import com.example.guitarApi.modules.entities.productEntities.UsersPackage.Admin;
+import com.example.guitarApi.modules.entities.productEntities.UsersPackage.User;
 import com.example.guitarApi.modules.entities.productEntities.products.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,27 @@ public class MainController {
     }
     @GetMapping("/get/admin/{id}")
     public ResponseEntity getAdminById(@PathVariable("id") long id){
-        return ResponseEntity.ok(dataAccessLayer.getAdminBuId(id));
+        return ResponseEntity.ok(dataAccessLayer.getAdminById(id));
+
+    }
+    @PostMapping("/new/user")
+    public ResponseEntity newUser(@RequestBody User user){
+        dataAccessLayer.createUser(user);
+        return ResponseEntity.ok("User added successfully!");
+    }
+    @DeleteMapping("/delete/user/{id}")
+    public ResponseEntity deleteUserById(@PathVariable("id") long id){
+        dataAccessLayer.deleteUserById(id);
+        return ResponseEntity.ok("User deleted successfully!");
+    }
+    @PutMapping("/update/user/{id}")
+    public ResponseEntity updateUserById(@PathVariable("id") long id, @RequestBody User updatedUser){
+        dataAccessLayer.updateUser(id, updatedUser);
+        return ResponseEntity.ok("User updated successfully!");
+    }
+    @GetMapping("/get/user/{id}")
+    public ResponseEntity getUserById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getUserById(id));
 
     }
 }

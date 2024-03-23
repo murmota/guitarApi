@@ -1,5 +1,6 @@
 package com.example.guitarApi.modules.entities.productEntities.UsersPackage;
 
+import com.example.guitarApi.modules.entities.productEntities.sevice.Basket;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,4 +19,6 @@ public class User {
     private String password;
     @Column(name = "PhoneNumber")
     private String phoneNumber;
+    @OneToOne(mappedBy = "user")
+    private Basket basket;
 }

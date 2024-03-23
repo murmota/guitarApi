@@ -1,5 +1,6 @@
 package com.example.guitarApi.dal;
 import com.example.guitarApi.modules.entities.productEntities.UsersPackage.Admin;
+import com.example.guitarApi.modules.entities.productEntities.UsersPackage.User;
 import com.example.guitarApi.modules.entities.productEntities.products.Product;
 import lombok.Getter;
 import org.hibernate.Session;
@@ -38,7 +39,7 @@ public class DataAccessLayer {
         session = sessionFactory.openSession();
         session.beginTransaction();
         Product product = session.get(Product.class, id);
-        product.setProductType(UpdatedProduct.getProductType());
+        product.setArticul(UpdatedProduct.getArticul());
         product.setCompany(UpdatedProduct.getCompany());
         product.setName(UpdatedProduct.getName());
         product.setColor(UpdatedProduct.getColor());
@@ -97,7 +98,7 @@ public class DataAccessLayer {
             session.close();
         }
     }
-    public Admin getAdminBuId(Long id){
+    public Admin getAdminById(Long id){
         session = sessionFactory.openSession();
         session.beginTransaction();
         Admin admin = session.get(Admin.class, id);
@@ -106,5 +107,48 @@ public class DataAccessLayer {
             session.close();
         }
         return admin;
+    }
+    public void createUser(User user){
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.persist(user);
+        session.getTransaction().commit();
+        if (session != null) {
+            session.close();
+        }
+    }
+    public void deleteUserById(Long id){
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, id);
+        session.remove(id);
+        session.getTransaction().commit();
+        if (session != null) {
+            session.close();
+        }
+    }
+    public void updateUser(Long id, User updatedUser){
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, id);
+        user.setName(updatedUser.getName());
+        user.setEmail(updatedUser.getEmail());
+        user.setPassword(updatedUser.getPassword());
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
+        session.merge(user);
+        session.getTransaction().commit();
+        if (session != null) {
+            session.close();
+        }
+    }
+    public User getUserById(Long id){
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, id);
+        session.getTransaction().commit();
+        if (session != null) {
+            session.close();
+        }
+        return user;
     }
 }
