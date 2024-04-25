@@ -1,20 +1,17 @@
-package com.example.guitarApi.modules.entities.productEntities.sevice;
-
-import com.example.guitarApi.modules.entities.productEntities.products.Product;
+package com.example.guitarApi.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name ="Discount", schema = "public", catalog = "postgres")
-public class  Discount {
+public class    Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "discount")
+    @Column(name = "percent")
     private int percent;
     @OneToOne
-    @JoinColumn(name = "articul")
+    @JoinColumn(name = "product_id")
     private Product product;
-
 }

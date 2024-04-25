@@ -1,11 +1,6 @@
-package com.example.guitarApi.modules.entities.productEntities.sevice;
-
-import com.example.guitarApi.modules.entities.productEntities.UsersPackage.User;
+package com.example.guitarApi.models;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Date;
-
 @Entity
 @Data
 @Table(name = "Order", schema = "public", catalog = "postgres")
@@ -16,7 +11,6 @@ public class Order {
     @Column(name = "Status")
     private boolean status;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @JoinColumn(name = "product_id")
+    private Basket basket;
 }

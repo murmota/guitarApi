@@ -1,83 +1,85 @@
 package com.example.guitarApi.Controllers;
 import com.example.guitarApi.dal.DataAccessLayer;
-import com.example.guitarApi.modules.entities.productEntities.UsersPackage.Admin;
-import com.example.guitarApi.modules.entities.productEntities.UsersPackage.User;
-import com.example.guitarApi.modules.entities.productEntities.products.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/")
+@RequestMapping("/unauthorized")
 public class MainController {
         private final DataAccessLayer dataAccessLayer;
         @Autowired
         public MainController(DataAccessLayer dataAccessLayer) {
             this.dataAccessLayer = dataAccessLayer;
         }
-    @PostMapping("/new/product")
-    public ResponseEntity<String> newGuitar(@RequestBody Product product) {
-        try {
-            dataAccessLayer.createProductToDatabase(product);
-            return ResponseEntity.ok("Product added successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add product: " + e.getMessage());
-        }
+    @GetMapping("/hello")
+    public void hello(){
+        log.info("Gracias Senior Pumba");
     }
-    @DeleteMapping("/delete/product/{id}")
-    public ResponseEntity deleteProductById(@PathVariable("id") long id){
-        dataAccessLayer.deleteProductById(id);
-        return ResponseEntity.ok("Product deleted successfully!");
+    @GetMapping("/user")
+    public void user(){
+        log.info("Gracias Senior user");
     }
-    @PutMapping("/update/product/{id}")
-    public ResponseEntity updateProductById(@PathVariable("id") long id, @RequestBody Product updatedProduct){
-        dataAccessLayer.updateProductById(id, updatedProduct);
-        return ResponseEntity.ok("Product updated successfully!");
+    @GetMapping("/admin")
+    public void admin(){
+        log.info("Gracias Senior admin");
     }
     @GetMapping("/get/product/{id}")
     public ResponseEntity getProductById(@PathVariable("id") long id){
         return ResponseEntity.ok(dataAccessLayer.getProductById(id));
     }
-    @PostMapping("/new/admin")
-    public ResponseEntity newAdmin(@RequestBody Admin admin){
-        dataAccessLayer.newAdmin(admin);
-        return ResponseEntity.ok("Admin added successfully!");
-    }
-    @DeleteMapping("/delete/admin/{id}")
-    public ResponseEntity deleteAdminById(@PathVariable("id") long id){
-        dataAccessLayer.deleteAdminById(id);
-        return ResponseEntity.ok("Admin deleted successfully!");
-    }
-    @PutMapping("/update/admin/{id}")
-    public ResponseEntity updateAdminById(@PathVariable("id") long id, @RequestBody Admin updatedAdmin){
-        dataAccessLayer.updateAdmin(id, updatedAdmin);
-        return ResponseEntity.ok("Admin updated successfully!");
-    }
-    @GetMapping("/get/admin/{id}")
-    public ResponseEntity getAdminById(@PathVariable("id") long id){
-        return ResponseEntity.ok(dataAccessLayer.getAdminById(id));
-
-    }
-    @PostMapping("/new/user")
-    public ResponseEntity newUser(@RequestBody User user){
-        dataAccessLayer.createUser(user);
-        return ResponseEntity.ok("User added successfully!");
-    }
-    @DeleteMapping("/delete/user/{id}")
-    public ResponseEntity deleteUserById(@PathVariable("id") long id){
-        dataAccessLayer.deleteUserById(id);
-        return ResponseEntity.ok("User deleted successfully!");
-    }
-    @PutMapping("/update/user/{id}")
-    public ResponseEntity updateUserById(@PathVariable("id") long id, @RequestBody User updatedUser){
-        dataAccessLayer.updateUser(id, updatedUser);
-        return ResponseEntity.ok("User updated successfully!");
+    @GetMapping("/get/products")
+    public ResponseEntity getProducts(){
+        return ResponseEntity.ok(dataAccessLayer.getProducts());
     }
     @GetMapping("/get/user/{id}")
     public ResponseEntity getUserById(@PathVariable("id") long id){
         return ResponseEntity.ok(dataAccessLayer.getUserById(id));
-
+    }
+    @GetMapping("/get/users")
+    public ResponseEntity getUsers(){
+        return ResponseEntity.ok(dataAccessLayer.getUsers());
+    }
+    @GetMapping("/get/basket/{id}")
+    public ResponseEntity getBasketById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getBasketById(id));
+    }
+    @GetMapping("/get/baskets")
+    public ResponseEntity getBaskets(){
+        return ResponseEntity.ok(dataAccessLayer.getBaskets());
+    }
+    @GetMapping("/get/discount/{id}")
+    public ResponseEntity getDiscountById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getDiscountById(id));
+    }
+    @GetMapping("/get/discounts")
+    public ResponseEntity getDiscounts(){
+        return ResponseEntity.ok(dataAccessLayer.getDiscounts());
+    }
+    @GetMapping("/get/order/{id}")
+    public ResponseEntity getOrderById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getOrderById(id));
+    }
+    @GetMapping("/get/orders")
+    public ResponseEntity getOrders(){
+        return ResponseEntity.ok(dataAccessLayer.getOrders());
+    }
+    @GetMapping("/get/point/{id}")
+    public ResponseEntity getPointById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getPointById(id));
+    }
+    @GetMapping("/get/points")
+    public ResponseEntity getPoints(){
+        return ResponseEntity.ok(dataAccessLayer.getPoints());
+    }
+    @GetMapping("/get/review/{id}")
+    public ResponseEntity getReviewById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getReviewById(id));
+    }
+    @GetMapping("/get/reviews")
+    public ResponseEntity getReviews(){
+        return ResponseEntity.ok(dataAccessLayer.getReviews());
     }
 }

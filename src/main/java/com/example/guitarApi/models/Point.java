@@ -1,9 +1,6 @@
-package com.example.guitarApi.modules.entities.productEntities.sevice;
-
+package com.example.guitarApi.models;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.List;
 
 @Entity
 @Data
@@ -14,10 +11,8 @@ public class Point {
     private Long id;
     @Column(name = "Address")
     private String address;
-    @Column(name = "isReady")
-    private boolean isReady;
-    @Column(name = "Employe")
-    private int employeQuantity;
-    @Column(name = "PhoneNumber")
+    @Column(name = "employeeQuantity")
+    private int employeeQuantity;
+    @Column(name = "Phone_Number")
     private String phoneNumber;
 }

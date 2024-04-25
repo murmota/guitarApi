@@ -1,9 +1,6 @@
-package com.example.guitarApi.modules.entities.productEntities.sevice;
-
+package com.example.guitarApi.models;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Date;
 
 @Entity
 @Data
@@ -12,14 +9,16 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "UserId")
-    private Long userId;
-    @Column(name = "ProductId")
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
     @Column(name = "Content")
     private String content;
     @Column(name = "Mark")
     private int mark;
     @Column(name = "Date")
-    private Date date;
+    private String date;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

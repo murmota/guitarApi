@@ -1,11 +1,6 @@
-package com.example.guitarApi.modules.entities.productEntities.sevice;
-import com.example.guitarApi.modules.entities.productEntities.UsersPackage.User;
-import com.example.guitarApi.modules.entities.productEntities.products.Product;
+package com.example.guitarApi.models;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.List;
-
 @Entity
 @Data
 @Table(name ="Basket", schema = "public", catalog = "postgres")
