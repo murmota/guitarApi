@@ -38,6 +38,7 @@ public class TokenFilter extends OncePerRequestFilter {
                     username = jwtCore.getNameFromJwt(jwt);
                 }
                 catch(ExpiredJwtException e){
+                    //TODO
                 }
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     userDetails = userDetailsService.loadUserByUsername(username);
@@ -47,6 +48,7 @@ public class TokenFilter extends OncePerRequestFilter {
             }
         }
         catch (Exception e) {
+            //TODO
         }
         filterChain.doFilter(request, response);
     }

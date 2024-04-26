@@ -23,8 +23,8 @@ public class UserDetailsImpl implements UserDetails {
                 user.getId(),
                 user.getUserName(),
                 user.getEmail(),
-                user.getPhoneNumber(),
-                user.getPassword());
+                user.getPassword(),
+                user.getPhoneNumber());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

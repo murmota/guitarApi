@@ -1,6 +1,5 @@
 package com.example.guitarApi.service;
 
-
 import com.example.guitarApi.dal.DataAccessLayer;
 import com.example.guitarApi.dto.SignupRequest;
 import com.example.guitarApi.models.User;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -22,17 +20,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
     public String newUser(SignupRequest signupRequest) {
         User user = new User();
-        user.setPassword(signupRequest.getPassword());
         user.setUserName(signupRequest.getUserName());
+        user.setRole(signupRequest.getRole());
+        user.setPhoneNumber(signupRequest.getPhoneNumber());
+        user.setEmail(signupRequest.getEmail());
+        user.setPassword(signupRequest.getPassword());
+
         return dataAccessLayer.newUserToDatabase(user);
     }
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = dataAccessLayer.getUserFromDatabaseByName(userName);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = dataAccessLayer.getUserFromDatabaseByUsername(username);
         if (user == null) return null;
         return UserDetailsImpl.build(user);
     }
-    public User loadUserEntityByUsername(String userName) throws UsernameNotFoundException {
-        return dataAccessLayer.getUserFromDatabaseByName(userName);
+
+    public User loadUserEntityByUsername(String username) throws UsernameNotFoundException {
+        return dataAccessLayer.getUserFromDatabaseByUsername(username);
     }
 }

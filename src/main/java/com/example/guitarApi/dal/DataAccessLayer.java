@@ -102,6 +102,7 @@ public class DataAccessLayer {
         user.setEmail(updatedUser.getEmail());
         user.setPassword(updatedUser.getPassword());
         user.setPhoneNumber(updatedUser.getPhoneNumber());
+        user.setRole(updatedUser.getRole());
         session.merge(user);
         session.getTransaction().commit();
         if (session != null) {
@@ -146,7 +147,7 @@ public class DataAccessLayer {
         session.close();
         return "Pabeda)";
     }
-    public User getUserFromDatabaseByName(String name) {
+    public User getUserFromDatabaseByUsername(String name) {
         session = sessionFactory.openSession();
         session.getTransaction().begin();
         Query query = session

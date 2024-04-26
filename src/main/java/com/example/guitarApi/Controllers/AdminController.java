@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/")
+@RequestMapping("/admin")
 public class AdminController {
     private final DataAccessLayer dataAccessLayer;
     @Autowired
