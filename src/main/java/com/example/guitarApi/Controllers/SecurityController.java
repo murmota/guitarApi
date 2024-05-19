@@ -1,6 +1,7 @@
 package com.example.guitarApi.Controllers;
 
 import com.example.guitarApi.GuitarApiApplication;
+import com.example.guitarApi.dal.DataAccessLayer;
 import com.example.guitarApi.dto.SigninRequest;
 import com.example.guitarApi.dto.SignupRequest;
 import com.example.guitarApi.security.JwtCore;
@@ -21,9 +22,11 @@ import java.util.Objects;
 @CrossOrigin(origins = "http://localhost:8080")
 public class SecurityController {
     private final UserDetailsServiceImpl userService;
+    private final DataAccessLayer dataAccessLayer;
     @Autowired
-    public SecurityController(UserDetailsServiceImpl userService) {
+    public SecurityController(UserDetailsServiceImpl userService, DataAccessLayer dataAccessLayer) {
         this.userService = userService;
+        this.dataAccessLayer = dataAccessLayer;
     }
     @Autowired
     private JwtCore jwtCore;
@@ -56,5 +59,9 @@ public class SecurityController {
         GuitarApiApplication.currentUser = userService.loadUserEntityByUsername(signinRequest.getUserName());
         log.info("Вход прошёл успешно");
         return ResponseEntity.ok(jwt);
+    }
+    @GetMapping("/get/user/{id}")
+    public ResponseEntity getUserById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getUserById(id));
     }
 }

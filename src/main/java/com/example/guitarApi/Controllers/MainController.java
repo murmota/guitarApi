@@ -34,10 +34,7 @@ public class MainController {
     public ResponseEntity getProducts(){
         return ResponseEntity.ok(dataAccessLayer.getProducts());
     }
-    @GetMapping("/get/user/{id}")
-    public ResponseEntity getUserById(@PathVariable("id") long id){
-        return ResponseEntity.ok(dataAccessLayer.getUserById(id));
-    }
+
     @GetMapping("/get/users")
     public ResponseEntity getUsers(){
         return ResponseEntity.ok(dataAccessLayer.getUsers());
