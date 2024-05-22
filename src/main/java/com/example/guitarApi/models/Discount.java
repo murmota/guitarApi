@@ -11,7 +11,7 @@ public class    Discount {
     private Long id;
     @Column(name = "percent")
     private int percent;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 }

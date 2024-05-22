@@ -8,14 +8,12 @@
         <router-link to="/basket">Basket</router-link>
       </nav>
     </header>
-
     <!-- Body - Product Cards -->
     <main>
       <div class="product-card" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
-        <img :src="product.image" :alt="product.name">
         <h3>{{ product.name }}</h3>
         <p>{{ product.price }}</p>
-        <button @click.stop="addToBasket(product)">Add to Basket</button> 
+        <button @click.stop="addToBasket(product)">Add to Basket</button>
       </div>
     </main>
 
@@ -27,28 +25,45 @@
 </template>
 
 <script>
+  import Api from '@/api.js';
+import jwt_decode from 'vue-jwt-decode';
+
 export default {
   data() {
     return {
-      products: [
-        { id: 1, name: 'Product 1', price: '$10', image: 'product1.jpg' },
-        { id: 2, name: 'Product 2', price: '$20', image: 'product2.jpg' },
-        { id: 3, name: 'Product 3', price: '$30', image: 'product3.jpg' },
-        // Добавьте свои товары здесь
-      ]
+      products: []
     };
+  },
+  mounted() {
+    this.fetchProducts();
   },
   methods: {
     goToProduct(productId) {
       this.$router.push(`/product/${productId}`);
     },
     addToBasket(product) {
-      // В реальном приложении эти данные обычно добавляются в localStorage или отправляются на сервер
-      // Здесь просто добавляем товар в массив basketItems
       this.$root.$emit('add-to-basket', product);
+    },
+     fetchProducts() {
+      try {
+        // const token = this.$cookies.get('jwt');
+        // const decodedToken = jwt_decode(token);
+
+        // Важно: убедитесь, что у вас правильный URL для вашего бэкенда
+       Api.get('/auth/get/products', {
+          headers: {
+            'Authorization': 'Bearer ' + this.$cookies.get('jwt') 
+          }
+        })
+        .then(response => {this.products = response.data});
+        
+
+      } catch (error) {
+        console.error("There was an error fetching the products:", error);
+      }
     }
   }
-}
+};
 </script>
 
 <style scoped>

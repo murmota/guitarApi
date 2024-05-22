@@ -4,7 +4,10 @@ import com.example.guitarApi.GuitarApiApplication;
 import com.example.guitarApi.dal.DataAccessLayer;
 import com.example.guitarApi.dto.SigninRequest;
 import com.example.guitarApi.dto.SignupRequest;
+import com.example.guitarApi.models.Discount;
+import com.example.guitarApi.models.Product;
 import com.example.guitarApi.security.JwtCore;
+import com.example.guitarApi.security.UserDetailsImpl;
 import com.example.guitarApi.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +63,28 @@ public class SecurityController {
         log.info("Вход прошёл успешно");
         return ResponseEntity.ok(jwt);
     }
+
     @GetMapping("/get/user/{id}")
     public ResponseEntity getUserById(@PathVariable("id") long id){
         return ResponseEntity.ok(dataAccessLayer.getUserById(id));
     }
+    @PostMapping("/create/product")
+    public ResponseEntity<String> createProduct(@RequestBody Product product) {
+        try {
+            dataAccessLayer.createProduct(product);
+            return ResponseEntity.ok("Product added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add product: " + e.getMessage());
+        }
+    }
+    @GetMapping("/get/products")
+    public ResponseEntity getProducts(){
+        return ResponseEntity.ok(dataAccessLayer.getProducts());
+    }
+    @PostMapping("/create/discount")
+    public ResponseEntity createDiscount(@RequestBody Discount discount){
+        dataAccessLayer.createDiscount(discount);
+        return ResponseEntity.ok("Discount added successfully!");
+    }
+
 }

@@ -16,7 +16,13 @@ public class JwtCore {
     private int lifetime;
 
     public String generateToken(UserDetails userDetails){
-        return Jwts.builder().setSubject(userDetails.getUsername()).setIssuedAt(new Date())
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .claim("id", ((UserDetailsImpl) userDetails).getId())
+                .claim("username", userDetails.getUsername())
+                .claim("email", ((UserDetailsImpl) userDetails).getEmail())
+                .claim("phoneNumber", ((UserDetailsImpl) userDetails).getPhoneNumber())
+                .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date().getTime() + lifetime)))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();

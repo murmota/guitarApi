@@ -14,15 +14,7 @@ public class AdminController {
     public AdminController(DataAccessLayer dataAccessLayer) {
         this.dataAccessLayer = dataAccessLayer;
     }
-    @PostMapping("/create/product")
-    public ResponseEntity<String> createProduct(@RequestBody Product product) {
-        try {
-            dataAccessLayer.createProduct(product);
-            return ResponseEntity.ok("Product added successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add product: " + e.getMessage());
-        }
-    }
+
     @DeleteMapping("/delete/product/{id}")
     public ResponseEntity deleteProductById(@PathVariable("id") long id){
         dataAccessLayer.deleteProductById(id);
@@ -63,11 +55,7 @@ public class AdminController {
         dataAccessLayer.updateBasket(id, updatedBasket);
         return ResponseEntity.ok("Basket updated successfully!");
     }
-    @PostMapping("/create/discount")
-    public ResponseEntity createDiscount(@RequestBody Discount discount){
-        dataAccessLayer.createDiscount(discount);
-        return ResponseEntity.ok("Discount added successfully!");
-    }
+
     @DeleteMapping("/delete/discount/{id}")
     public ResponseEntity deleteDiscountById(@PathVariable("id") long id){
         dataAccessLayer.deleteDiscountById(id);
