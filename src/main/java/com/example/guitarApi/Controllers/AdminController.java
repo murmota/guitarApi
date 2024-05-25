@@ -5,11 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/admin")
 public class AdminController {
     private final DataAccessLayer dataAccessLayer;
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+    public void someMethod() {
+        logger.debug("Debug message");
+        logger.info("Info message");
+        logger.warn("Warning message");
+        logger.error("Error message");
+    }
     @Autowired
     public AdminController(DataAccessLayer dataAccessLayer) {
         this.dataAccessLayer = dataAccessLayer;

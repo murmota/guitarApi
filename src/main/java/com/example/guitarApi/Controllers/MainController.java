@@ -4,12 +4,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/unauthorized")
 public class MainController {
         private final DataAccessLayer dataAccessLayer;
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+    public void someMethod() {
+        logger.debug("Debug message");
+        logger.info("Info message");
+        logger.warn("Warning message");
+        logger.error("Error message");
+    }
         @Autowired
         public MainController(DataAccessLayer dataAccessLayer) {
             this.dataAccessLayer = dataAccessLayer;

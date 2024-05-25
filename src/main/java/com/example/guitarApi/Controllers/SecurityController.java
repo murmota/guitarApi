@@ -7,7 +7,6 @@ import com.example.guitarApi.dto.SignupRequest;
 import com.example.guitarApi.models.Discount;
 import com.example.guitarApi.models.Product;
 import com.example.guitarApi.security.JwtCore;
-import com.example.guitarApi.security.UserDetailsImpl;
 import com.example.guitarApi.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
@@ -26,6 +27,13 @@ import java.util.Objects;
 public class SecurityController {
     private final UserDetailsServiceImpl userService;
     private final DataAccessLayer dataAccessLayer;
+    private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
+    public void someMethod() {
+        logger.debug("Debug message");
+        logger.info("Info message");
+        logger.warn("Warning message");
+        logger.error("Error message");
+    }
     @Autowired
     public SecurityController(UserDetailsServiceImpl userService, DataAccessLayer dataAccessLayer) {
         this.userService = userService;
