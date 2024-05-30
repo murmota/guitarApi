@@ -52,8 +52,7 @@ public class SecurityConfiguration {
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/main/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/secured/**").fullyAuthenticated()
                         .requestMatchers("/admin/**").fullyAuthenticated()
                         .anyRequest().permitAll())

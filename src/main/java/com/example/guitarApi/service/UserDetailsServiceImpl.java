@@ -21,7 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public String newUser(SignupRequest signupRequest) {
         User user = new User();
         user.setUserName(signupRequest.getUserName());
-        user.setRole(signupRequest.getRole());
         user.setPhoneNumber(signupRequest.getPhoneNumber());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(signupRequest.getPassword());

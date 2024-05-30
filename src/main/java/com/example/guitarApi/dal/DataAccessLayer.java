@@ -102,7 +102,6 @@ public class DataAccessLayer {
         user.setEmail(updatedUser.getEmail());
         user.setPassword(updatedUser.getPassword());
         user.setPhoneNumber(updatedUser.getPhoneNumber());
-        user.setRole(updatedUser.getRole());
         session.merge(user);
         session.getTransaction().commit();
         if (session != null) {

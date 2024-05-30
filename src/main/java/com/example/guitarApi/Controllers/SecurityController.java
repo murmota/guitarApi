@@ -4,8 +4,7 @@ import com.example.guitarApi.GuitarApiApplication;
 import com.example.guitarApi.dal.DataAccessLayer;
 import com.example.guitarApi.dto.SigninRequest;
 import com.example.guitarApi.dto.SignupRequest;
-import com.example.guitarApi.models.Discount;
-import com.example.guitarApi.models.Product;
+import com.example.guitarApi.models.*;
 import com.example.guitarApi.security.JwtCore;
 import com.example.guitarApi.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import java.util.Objects;
 
 @RestController
 @Slf4j
-@RequestMapping("/auth")
+@RequestMapping("/secured")
 @CrossOrigin(origins = "http://localhost:8080")
 public class SecurityController {
     private final UserDetailsServiceImpl userService;
@@ -76,23 +75,55 @@ public class SecurityController {
     public ResponseEntity getUserById(@PathVariable("id") long id){
         return ResponseEntity.ok(dataAccessLayer.getUserById(id));
     }
-    @PostMapping("/create/product")
-    public ResponseEntity<String> createProduct(@RequestBody Product product) {
-        try {
-            dataAccessLayer.createProduct(product);
-            return ResponseEntity.ok("Product added successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add product: " + e.getMessage());
-        }
+    @PostMapping("/create/review")
+    public ResponseEntity createReview(@RequestBody Review review){
+        dataAccessLayer.createReview(review);
+        return ResponseEntity.ok("Review added successfully!");
     }
-    @GetMapping("/get/products")
-    public ResponseEntity getProducts(){
-        return ResponseEntity.ok(dataAccessLayer.getProducts());
+    @DeleteMapping("/delete/review/{id}")
+    public ResponseEntity deleteReviewById(@PathVariable("id") long id){
+        dataAccessLayer.deleteReviewById(id);
+        return ResponseEntity.ok("Review deleted successfully!");
     }
-    @PostMapping("/create/discount")
-    public ResponseEntity createDiscount(@RequestBody Discount discount){
-        dataAccessLayer.createDiscount(discount);
-        return ResponseEntity.ok("Discount added successfully!");
+    @PutMapping("/update/review/{id}")
+    public ResponseEntity updateReviewById(@PathVariable("id") long id, @RequestBody Review updatedReview){
+        dataAccessLayer.updateReview(id, updatedReview);
+        return ResponseEntity.ok("Review updated successfully!");
+    }
+    @PostMapping("/create/order")
+    public ResponseEntity createOreder(@RequestBody Order order){
+        dataAccessLayer.createOrder(order);
+        return ResponseEntity.ok("Order added successfully!");
+    }
+    @DeleteMapping("/delete/order/{id}")
+    public ResponseEntity deleteOrderById(@PathVariable("id") long id){
+        dataAccessLayer.deleteOrderById(id);
+        return ResponseEntity.ok("Order deleted successfully!");
+    }
+    @PutMapping("/update/order/{id}")
+    public ResponseEntity updateOrderById(@PathVariable("id") long id, @RequestBody Order updatedOrder){
+        dataAccessLayer.updateOrder(id, updatedOrder);
+        return ResponseEntity.ok("Order updated successfully!");
+    }
+    @PutMapping("/update/basket/{id}")
+    public ResponseEntity updateBasketById(@PathVariable("id") long id, @RequestBody Basket updatedBasket){
+        dataAccessLayer.updateBasket(id, updatedBasket);
+        return ResponseEntity.ok("Basket updated successfully!");
+    }
+    @PostMapping("/create/basket")
+    public ResponseEntity createUser(@RequestBody Basket basket){
+        dataAccessLayer.createBasket(basket);
+        return ResponseEntity.ok("Basket added successfully!");
+    }
+    @DeleteMapping("/delete/basket/{id}")
+    public ResponseEntity deleteBasketById(@PathVariable("id") long id){
+        dataAccessLayer.deleteBasketById(id);
+        return ResponseEntity.ok("Basket deleted successfully!");
+    }
+    @PutMapping("/update/user/{id}")
+    public ResponseEntity updateUserById(@PathVariable("id") long id, @RequestBody User updatedUser){
+        dataAccessLayer.updateUser(id, updatedUser);
+        return ResponseEntity.ok("User updated successfully!");
     }
 
 }

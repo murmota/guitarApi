@@ -16,6 +16,6 @@ public class User {
     private String password;
     @Column(name = "Phone_Number")
     private String phoneNumber;
-    @Column(name = "role")
-    private String role;
+//    @Column(name = "isAdmin")
+//    private boolean isAdmin;
 }

@@ -37,7 +37,7 @@ export default {
         phoneNumber: this.phoneNumber,
       }
       
-      Api.post('http://localhost:8080/auth/signup', registerData)
+      Api.post('http://localhost:8080/secured/signup', registerData)
         .then(response => {
           // Обработка успешного ответа от сервера
           console.log('Registration successful!', response.data);

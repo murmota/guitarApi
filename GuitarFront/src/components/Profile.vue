@@ -1,13 +1,14 @@
 <template>
     <div>
-      <h2>User Profile</h2>
+      <h2>Profile</h2>
       <div v-if="user">
         <p><strong>Username:</strong> {{ this.user }}</p>
         <p><strong>Email:</strong> {{ this.email }}</p>
         <!-- Другие данные профиля -->
       </div>
       <div v-else>
-        <p>No user data available.</p>
+        <p>You are unauthorized</p>
+        <h5>login to see your profile</h5>
       </div>
     </div>
   </template>
@@ -39,7 +40,7 @@
     } else {
         console.log('Неверный токен');
     }
-        Api.get('/auth/get/user/'+this.userId, { 
+        Api.get('/secured/get/user/'+this.userId, { 
           
   headers: { 
     'Authorization': 'Bearer ' + this.$cookies.get('jwt') // Получаем JWT токен из cookie 

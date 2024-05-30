@@ -1,5 +1,6 @@
 package com.example.guitarApi.Controllers;
 import com.example.guitarApi.dal.DataAccessLayer;
+import com.example.guitarApi.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import org.slf4j.LoggerFactory;
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/unauthorized")
+@RequestMapping("/")
 public class MainController {
         private final DataAccessLayer dataAccessLayer;
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
@@ -38,6 +39,10 @@ public class MainController {
     @GetMapping("/get/product/{id}")
     public ResponseEntity getProductById(@PathVariable("id") long id){
         return ResponseEntity.ok(dataAccessLayer.getProductById(id));
+    }
+    @GetMapping("/get/products")
+    public ResponseEntity getProducts(){
+        return ResponseEntity.ok(dataAccessLayer.getProducts());
     }
 
     @GetMapping("/get/users")
@@ -84,4 +89,5 @@ public class MainController {
     public ResponseEntity getReviews(){
         return ResponseEntity.ok(dataAccessLayer.getReviews());
     }
+
 }

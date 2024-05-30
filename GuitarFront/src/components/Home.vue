@@ -26,7 +26,6 @@
 
 <script>
   import Api from '@/api.js';
-import jwt_decode from 'vue-jwt-decode';
 
 export default {
   data() {
@@ -50,7 +49,7 @@ export default {
         // const decodedToken = jwt_decode(token);
 
         // Важно: убедитесь, что у вас правильный URL для вашего бэкенда
-       Api.get('/auth/get/products', {
+       Api.get('/get/products', {
           headers: {
             'Authorization': 'Bearer ' + this.$cookies.get('jwt') 
           }

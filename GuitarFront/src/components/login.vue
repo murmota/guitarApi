@@ -27,7 +27,7 @@ import Api from '@/api.js';
         userName: this.userName,
         password: this.password
       }
-      Api.post('/auth/signin', loginData)
+      Api.post('/secured/signin', loginData)
         .then(response => { 
           this.jwt = response.data; 
               this.$cookies.remove('jwt'); 
