@@ -4,7 +4,7 @@
       <form @submit.prevent="loginUser">
         <input type="userName" v-model="userName" placeholder="user name" required>
         <input type="password" v-model="password" placeholder="Password" required>
-        <button type="submit"   >Login</button>
+        <button type="submit">Login</button>
         <router-link to="/registration">Create account</router-link>
       </form> 
     </div>
@@ -37,7 +37,7 @@ import Api from '@/api.js';
         })
         .catch(error => {
           // Обработка ошибок
-          console.error('Login failed:', error.response.data);
+          console.error('Login failed:', error.data);
 
         });
         

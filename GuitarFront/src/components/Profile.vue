@@ -45,7 +45,7 @@
     } else {
         console.log('Неверный токен');
     }
-        Api.get('/secured/get/user/'+this.userId, { 
+        Api.get('/admin/get/user/'+this.userId, { 
           
   headers: { 
     'Authorization': 'Bearer ' + this.$cookies.get('jwt') // Получаем JWT токен из cookie 

@@ -42,7 +42,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createAdmin(@RequestBody SignupRequest signupRequest) {
         signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-        signupRequest.setRoles(Set.of("ROLE_USER", "ROLE_ADMIN"));
+        signupRequest.setRoles(Set.of("ROLE_ADMIN"));
         String serviceResult = userService.newUser(signupRequest);
         if (Objects.equals(serviceResult, "Выберите другое имя")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(serviceResult);
@@ -61,6 +61,18 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add product: " + e.getMessage());
         }
     }
+
+
+
+    @GetMapping("/get/user/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity getUserById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getUserById(id));
+    }
+
+
+
+
     @GetMapping("/get/orders")
     public ResponseEntity getOrders(){
         return ResponseEntity.ok(dataAccessLayer.getOrders());
