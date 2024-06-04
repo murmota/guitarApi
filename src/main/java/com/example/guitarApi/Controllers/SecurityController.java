@@ -119,15 +119,11 @@ public class SecurityController {
         dataAccessLayer.createBasket(basket);
         return ResponseEntity.ok("Basket added successfully!");
     }
-
-
-
-
-
-
-
-
-
+    @GetMapping("/get/user/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity getUserById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getUserById(id));
+    }
     @GetMapping("/get/baskets/{userId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Basket>> getBasketsByUserId(@PathVariable("userId") long userId) {
