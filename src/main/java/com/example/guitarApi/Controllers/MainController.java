@@ -16,7 +16,7 @@ public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     public void someMethod() {
         logger.debug("Debug message");
-        logger.info("Info message");
+//        logger.info("Info message");
         logger.warn("Warning message");
         logger.error("Error message");
     }

@@ -1,6 +1,10 @@
 package com.example.guitarApi.models;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @Table(name = "User", schema = "public", catalog = "postgres")
@@ -16,6 +20,8 @@ public class User {
     private String password;
     @Column(name = "Phone_Number")
     private String phoneNumber;
-//    @Column(name = "isAdmin")
-//    private boolean isAdmin = false;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "User_Role", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
 }

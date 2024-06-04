@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -30,7 +31,7 @@ public class SecurityController {
     private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
     public void someMethod() {
         logger.debug("Debug message");
-        logger.info("Info message");
+//        logger.info("Info message");
         logger.warn("Warning message");
         logger.error("Error message");
     }
@@ -47,6 +48,7 @@ public class SecurityController {
     @CrossOrigin(origins = "http://localhost:3000")
     ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
         signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        signupRequest.setRoles(Set.of("ROLE_USER"));
         String serviceResult = userService.newUser(signupRequest);
         if (Objects.equals(serviceResult, "Выберите другое имя")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(serviceResult);

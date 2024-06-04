@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final DataAccessLayer dataAccessLayer;
@@ -24,6 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.setPhoneNumber(signupRequest.getPhoneNumber());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(signupRequest.getPassword());
+        user.setRoles(signupRequest.getRoles());
 
         return dataAccessLayer.newUserToDatabase(user);
     }

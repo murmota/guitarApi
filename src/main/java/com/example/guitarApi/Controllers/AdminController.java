@@ -1,27 +1,56 @@
 package com.example.guitarApi.Controllers;
 import com.example.guitarApi.dal.DataAccessLayer;
+import com.example.guitarApi.dto.SignupRequest;
 import com.example.guitarApi.models.*;
+import com.example.guitarApi.security.JwtCore;
+import com.example.guitarApi.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
+import java.util.Set;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/admin")
 public class AdminController {
     private final DataAccessLayer dataAccessLayer;
+    private final UserDetailsServiceImpl userService;
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
     public void someMethod() {
         logger.debug("Debug message");
-        logger.info("Info message");
+//        logger.info("Info message");
         logger.warn("Warning message");
         logger.error("Error message");
     }
     @Autowired
-    public AdminController(DataAccessLayer dataAccessLayer) {
+    public AdminController(UserDetailsServiceImpl userService, DataAccessLayer dataAccessLayer) {
+        this.userService = userService;
         this.dataAccessLayer = dataAccessLayer;
+    }
+    @Autowired
+    private JwtCore jwtCore;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> createAdmin(@RequestBody SignupRequest signupRequest) {
+        signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        signupRequest.setRoles(Set.of("ROLE_USER", "ROLE_ADMIN"));
+        String serviceResult = userService.newUser(signupRequest);
+        if (Objects.equals(serviceResult, "Выберите другое имя")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(serviceResult);
+        }
+        if (Objects.equals(serviceResult, "Выберите другую почту")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(serviceResult);
+        }
+        return ResponseEntity.ok("Администратор успешно создан.");
     }
     @PostMapping("/create/product")
     public ResponseEntity<String> createProduct(@RequestBody Product product) {
