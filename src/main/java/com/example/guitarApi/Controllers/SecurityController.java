@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -57,10 +58,10 @@ public class SecurityController {
     }
 
     @PostMapping("/signin")
-    @CrossOrigin(origins = "http://localhost:3000")
+     @CrossOrigin(origins = "http://localhost:3000")
     ResponseEntity<?> signin(@RequestBody SigninRequest signinRequest) {
         UserDetails user = userService.loadUserByUsername(signinRequest.getUserName());
-        String hashedPassword = passwordEncoder.encode(signinRequest.getPassword());        // Сравниваем хешированный пароль из запроса с хешированным паролем пользователя из базы данных
+//        String hashedPassword = passwordEncoder.encode(signinRequest.getPassword());       // Сравниваем хешированный пароль из запроса с хешированным паролем пользователя из базы данных
         if (Objects.equals(user, null) || !passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
             log.info("Ошибка авторизации пользователя " + signinRequest.getUserName());
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -70,11 +71,12 @@ public class SecurityController {
         log.info("Вход прошёл успешно");
         return ResponseEntity.ok(jwt);
     }
-
-    @GetMapping("/get/user/{id}")
-    public ResponseEntity getUserById(@PathVariable("id") long id){
-        return ResponseEntity.ok(dataAccessLayer.getUserById(id));
+    @DeleteMapping("/delete/baskets/{userId}")
+    public ResponseEntity<String> deleteBasketsByUserId(@PathVariable("userId") long userId) {
+        dataAccessLayer.deleteBasketsByUserId(userId);
+        return ResponseEntity.ok("baskets");
     }
+
     @PostMapping("/create/review")
     public ResponseEntity createReview(@RequestBody Review review){
         dataAccessLayer.createReview(review);
@@ -100,30 +102,26 @@ public class SecurityController {
         dataAccessLayer.deleteOrderById(id);
         return ResponseEntity.ok("Order deleted successfully!");
     }
-    @PutMapping("/update/order/{id}")
-    public ResponseEntity updateOrderById(@PathVariable("id") long id, @RequestBody Order updatedOrder){
-        dataAccessLayer.updateOrder(id, updatedOrder);
-        return ResponseEntity.ok("Order updated successfully!");
-    }
-    @PutMapping("/update/basket/{id}")
-    public ResponseEntity updateBasketById(@PathVariable("id") long id, @RequestBody Basket updatedBasket){
-        dataAccessLayer.updateBasket(id, updatedBasket);
-        return ResponseEntity.ok("Basket updated successfully!");
-    }
     @PostMapping("/create/basket")
     public ResponseEntity createUser(@RequestBody Basket basket){
         dataAccessLayer.createBasket(basket);
         return ResponseEntity.ok("Basket added successfully!");
     }
-    @DeleteMapping("/delete/basket/{id}")
-    public ResponseEntity deleteBasketById(@PathVariable("id") long id){
-        dataAccessLayer.deleteBasketById(id);
-        return ResponseEntity.ok("Basket deleted successfully!");
+    @GetMapping("/get/user/{id}")
+    public ResponseEntity getUserById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getUserById(id));
+    }
+    @GetMapping("/get/baskets/{userId}")
+    public ResponseEntity<List<Basket>> getBasketsByUserId(@PathVariable("userId") long userId) {
+        return ResponseEntity.ok(dataAccessLayer.getBasketsByUserId(userId));
     }
     @PutMapping("/update/user/{id}")
     public ResponseEntity updateUserById(@PathVariable("id") long id, @RequestBody User updatedUser){
         dataAccessLayer.updateUser(id, updatedUser);
         return ResponseEntity.ok("User updated successfully!");
     }
-
+    @GetMapping("/get/order/{id}")
+    public ResponseEntity getOrderById(@PathVariable("id") long id){
+        return ResponseEntity.ok(dataAccessLayer.getOrderById(id));
+    }
 }

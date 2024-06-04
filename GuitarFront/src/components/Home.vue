@@ -6,6 +6,7 @@
       <nav>
         <router-link to="/login">Login</router-link>
         <router-link to="/basket">Basket</router-link>
+        <router-link to="/Profile">Profile</router-link>
       </nav>
     </header>
     <!-- Body - Product Cards -->
@@ -13,6 +14,11 @@
       <div class="product-card" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
         <h3>{{ product.name }}</h3>
         <p>{{ product.price }}</p>
+        <div class="quantity-control">
+          <button @click.stop="decreaseQuantity(product.id)">-</button>
+          <span>{{ quantities[product.id] || 1 }}</span>
+          <button @click.stop="increaseQuantity(product.id)">+</button>
+        </div>
         <button @click.stop="addToBasket(product)">Add to Basket</button>
       </div>
     </main>
@@ -24,13 +30,16 @@
   </div>
 </template>
 
+
 <script>
-  import Api from '@/api.js';
+import Api from '@/api.js';
+import jwt_decode from 'vue-jwt-decode';
 
 export default {
   data() {
     return {
-      products: []
+      products: [],
+      quantities: {} // Счетчики для каждого продукта
     };
   },
   mounted() {
@@ -41,28 +50,55 @@ export default {
       this.$router.push(`/product/${productId}`);
     },
     addToBasket(product) {
-      this.$root.$emit('add-to-basket', product);
-    },
-     fetchProducts() {
-      try {
-        // const token = this.$cookies.get('jwt');
-        // const decodedToken = jwt_decode(token);
+      const token = this.$cookies.get('jwt'); 
+      const decodedToken = jwt_decode(token);
 
-        // Важно: убедитесь, что у вас правильный URL для вашего бэкенда
-       Api.get('/get/products', {
+      if (decodedToken) {
+        this.userId = decodedToken.id;
+        const quantity = this.quantities[product.id] || 1; // Получаем количество товара
+        Api.post('/secured/create/basket', {
+          productId: product.id,
+          userId: this.userId,
+          quantity: quantity
+        })
+        .then(response => {
+          // Обработка успешного добавления товара в корзину
+          console.log('Product added to basket:', product);
+        })
+        .catch(error => {
+          // Обработка ошибки
+          console.error('Error adding product to basket:', error);
+        });
+      } else {
+        console.log('Invalid token');
+      }
+    },
+    increaseQuantity(productId) {
+      if (!this.quantities[productId]) {
+        this.$set(this.quantities, productId, 1);
+      }
+      this.quantities[productId]++;
+    },
+    decreaseQuantity(productId) {
+      if (this.quantities[productId] && this.quantities[productId] > 1) {
+        this.quantities[productId]--;
+      }
+    },
+    fetchProducts() {
+      try {
+        Api.get('/get/products', {
           headers: {
             'Authorization': 'Bearer ' + this.$cookies.get('jwt') 
           }
         })
         .then(response => {this.products = response.data});
-        
-
       } catch (error) {
         console.error("There was an error fetching the products:", error);
       }
     }
   }
 };
+
 </script>
 
 <style scoped>

@@ -32,6 +32,18 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add product: " + e.getMessage());
         }
     }
+    @GetMapping("/get/orders")
+    public ResponseEntity getOrders(){
+        return ResponseEntity.ok(dataAccessLayer.getOrders());
+    }
+    @GetMapping("/get/users")
+    public ResponseEntity getUsers(){
+        return ResponseEntity.ok(dataAccessLayer.getUsers());
+    }
+    @GetMapping("/get/baskets")
+    public ResponseEntity getBaskets(){
+        return ResponseEntity.ok(dataAccessLayer.getBaskets());
+    }
     @DeleteMapping("/delete/product/{id}")
     public ResponseEntity deleteProductById(@PathVariable("id") long id){
         dataAccessLayer.deleteProductById(id);
@@ -81,6 +93,11 @@ public class AdminController {
     public ResponseEntity updatePointById(@PathVariable("id") long id, @RequestBody Point updatedPoint){
         dataAccessLayer.updatePoint(id, updatedPoint);
         return ResponseEntity.ok("Point updated successfully!");
+    }
+    @PutMapping("/update/order/{id}")
+    public ResponseEntity updateOrderById(@PathVariable("id") long id, @RequestBody Order updatedOrder){
+        dataAccessLayer.updateOrder(id, updatedOrder);
+        return ResponseEntity.ok("Order updated successfully!");
     }
 
 }

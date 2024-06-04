@@ -1,12 +1,12 @@
 package com.example.guitarApi.Controllers;
 import com.example.guitarApi.dal.DataAccessLayer;
-import com.example.guitarApi.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -45,18 +45,6 @@ public class MainController {
         return ResponseEntity.ok(dataAccessLayer.getProducts());
     }
 
-    @GetMapping("/get/users")
-    public ResponseEntity getUsers(){
-        return ResponseEntity.ok(dataAccessLayer.getUsers());
-    }
-    @GetMapping("/get/basket/{id}")
-    public ResponseEntity getBasketById(@PathVariable("id") long id){
-        return ResponseEntity.ok(dataAccessLayer.getBasketById(id));
-    }
-    @GetMapping("/get/baskets")
-    public ResponseEntity getBaskets(){
-        return ResponseEntity.ok(dataAccessLayer.getBaskets());
-    }
     @GetMapping("/get/discount/{id}")
     public ResponseEntity getDiscountById(@PathVariable("id") long id){
         return ResponseEntity.ok(dataAccessLayer.getDiscountById(id));
@@ -64,14 +52,6 @@ public class MainController {
     @GetMapping("/get/discounts")
     public ResponseEntity getDiscounts(){
         return ResponseEntity.ok(dataAccessLayer.getDiscounts());
-    }
-    @GetMapping("/get/order/{id}")
-    public ResponseEntity getOrderById(@PathVariable("id") long id){
-        return ResponseEntity.ok(dataAccessLayer.getOrderById(id));
-    }
-    @GetMapping("/get/orders")
-    public ResponseEntity getOrders(){
-        return ResponseEntity.ok(dataAccessLayer.getOrders());
     }
     @GetMapping("/get/point/{id}")
     public ResponseEntity getPointById(@PathVariable("id") long id){

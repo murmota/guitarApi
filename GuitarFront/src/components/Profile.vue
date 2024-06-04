@@ -4,6 +4,7 @@
       <div v-if="user">
         <p><strong>Username:</strong> {{ this.user }}</p>
         <p><strong>Email:</strong> {{ this.email }}</p>
+        <button class="b_logout" @click="logOut()">Выйти из аккаунта</button>
         <!-- Другие данные профиля -->
       </div>
       <div v-else>
@@ -29,6 +30,10 @@
       this.fetchUserProfile();
     },
     methods: {
+      logOut(){ 
+      this.$cookies.remove('jwt'); 
+      window.location.href="/login" 
+    },
       
       fetchUserProfile() {
         const token = this.$cookies.get('jwt'); 

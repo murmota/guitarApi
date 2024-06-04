@@ -17,5 +17,5 @@ public class User {
     @Column(name = "Phone_Number")
     private String phoneNumber;
 //    @Column(name = "isAdmin")
-//    private boolean isAdmin;
+//    private boolean isAdmin = false;
 }

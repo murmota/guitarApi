@@ -167,38 +167,20 @@ public class DataAccessLayer {
             session.close();
         }
     }
-    public void deleteBasketById(Long id){
-        session = sessionFactory.openSession();
+
+    public void deleteBasketsByUserId(Long userId) {
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Basket basket = session.get(Basket.class, id);
-        session.remove(id);
-        session.getTransaction().commit();
-        if (session != null) {
-            session.close();
+        List<Basket> basketsToDelete = session.createQuery("SELECT b FROM Basket b WHERE b.user.id = :userId", Basket.class)
+                .setParameter("userId", userId)
+                .getResultList();
+        for (Basket basket : basketsToDelete) {
+            session.remove(basket);
         }
-    }
-    public void updateBasket(Long id, Basket updatedBasket){
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-        Basket basket = session.get(Basket.class, id);
-        basket.setUser(updatedBasket.getUser());
-        basket.setProduct(updatedBasket.getProduct());
-        session.merge(basket);
         session.getTransaction().commit();
-        if (session != null) {
-            session.close();
+        session.close();
         }
-    }
-    public Basket getBasketById(Long id){
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-        Basket basket = session.get(Basket.class, id);
-        session.getTransaction().commit();
-        if (session != null) {
-            session.close();
-        }
-        return basket;
-    }
+
     public List<Basket> getBaskets(){
         session = sessionFactory.openSession();
         session.getTransaction().begin();
@@ -208,6 +190,13 @@ public class DataAccessLayer {
         query.select(root);
         List<Basket> resultList = session.createQuery(query).getResultList();
         return resultList;
+    }
+    public List<Basket> getBasketsByUserId(Long userId) {
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        return session.createQuery("SELECT b FROM Basket b WHERE b.user.id = :userId", Basket.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
     public void createDiscount(Discount newDiscount) {
         session = sessionFactory.openSession();
