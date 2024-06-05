@@ -11,6 +11,6 @@ public class Order {
     @Column(name = "Status")
     private boolean status;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "user_id")
     private Basket basket;
 }

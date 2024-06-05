@@ -14,11 +14,11 @@
       <div class="product-card" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
         <h3>{{ product.name }}</h3>
         <p>{{ product.price }}</p>
-        <div class="quantity-control">
+        <!-- <div class="quantity-control">
           <button @click.stop="decreaseQuantity(product.id)">-</button>
           <span>{{ quantities[product.id] || 1 }}</span>
           <button @click.stop="increaseQuantity(product.id)">+</button>
-        </div>
+        </div> -->
         <button @click.stop="addToBasket(product)">Add to Basket</button>
       </div>
     </main>
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       products: [],
-      quantities: {} // Счетчики для каждого продукта
+      // quantities: {} // Счетчики для каждого продукта
     };
   },
   mounted() {
@@ -51,39 +51,25 @@ export default {
     },
     addToBasket(product) {
       const token = this.$cookies.get('jwt'); 
-      const decodedToken = jwt_decode(token);
+      const decodedToken = jwt_decode.decode(token);
 
       if (decodedToken) {
         this.userId = decodedToken.id;
-        const quantity = this.quantities[product.id] || 1; // Получаем количество товара
-        Api.post('/secured/create/basket', {
-          productId: product.id,
-          userId: this.userId,
-          quantity: quantity
+        Api.post('secured/create/basket', {
+          user: {id: this.userId},
+          product:{id: product.id}
         })
         .then(response => {
-          // Обработка успешного добавления товара в корзину
-          console.log('Product added to basket:', product);
+          console.log('Product added to basket:', product.id, this.userId);
         })
         .catch(error => {
-          // Обработка ошибки
           console.error('Error adding product to basket:', error);
         });
       } else {
         console.log('Invalid token');
       }
     },
-    increaseQuantity(productId) {
-      if (!this.quantities[productId]) {
-        this.$set(this.quantities, productId, 1);
-      }
-      this.quantities[productId]++;
-    },
-    decreaseQuantity(productId) {
-      if (this.quantities[productId] && this.quantities[productId] > 1) {
-        this.quantities[productId]--;
-      }
-    },
+
     fetchProducts() {
       try {
         Api.get('/get/products', {

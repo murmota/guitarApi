@@ -20,6 +20,4 @@ public class Basket {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    @Column(name = "quantity")
-    private int quantity;
 }
