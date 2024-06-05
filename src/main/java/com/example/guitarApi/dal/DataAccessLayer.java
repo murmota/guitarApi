@@ -252,12 +252,15 @@ public class DataAccessLayer {
     public void createOrder(Order order){
         session = sessionFactory.openSession();
         session.beginTransaction();
-        session.persist(order);
+        session.merge(order);
         session.getTransaction().commit();
         if (session != null) {
             session.close();
         }
+        //        order.setStatus(false);
     }
+
+
     public void deleteOrderById(Long id){
         session = sessionFactory.openSession();
         session.beginTransaction();
@@ -272,8 +275,8 @@ public class DataAccessLayer {
         session = sessionFactory.openSession();
         session.beginTransaction();
         Order order = session.get(Order.class, id);
-        order.setBasket(updatedorder.getBasket());
-        order.setStatus(updatedorder.isStatus());
+//        order.setBasket(updatedorder.getBasket());
+//        order.setStatus(updatedorder.isStatus());
         session.merge(order);
         session.getTransaction().commit();
         if (session != null) {

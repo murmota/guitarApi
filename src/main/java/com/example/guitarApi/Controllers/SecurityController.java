@@ -101,12 +101,23 @@ public class SecurityController {
         dataAccessLayer.updateReview(id, updatedReview);
         return ResponseEntity.ok("Review updated successfully!");
     }
-    @PostMapping("/create/order")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity createOreder(@RequestBody Order order){
-        dataAccessLayer.createOrder(order);
-        return ResponseEntity.ok("Order added successfully!");
+//    @PostMapping("/create/order")
+//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//    public ResponseEntity createOreder(@RequestBody Order order){
+//        dataAccessLayer.createOrder(order);
+//        return ResponseEntity.ok("Order added successfully!");
+//    }
+@PostMapping("/create/order/{userId}")
+public Order createOrder(@PathVariable("userId") long userId) {
+    List<Basket> baskets = dataAccessLayer.getBasketsByUserId(userId);
+    Order order = new Order();
+    for (Basket basket : baskets) {
+        basket.setOrder(order);
     }
+    order.setBaskets(baskets);
+    dataAccessLayer.createOrder(order);
+    return order;
+}
     @DeleteMapping("/delete/order/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity deleteOrderById(@PathVariable("id") long id){
