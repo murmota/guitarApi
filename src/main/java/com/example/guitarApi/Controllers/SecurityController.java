@@ -4,6 +4,7 @@ import com.example.guitarApi.GuitarApiApplication;
 import com.example.guitarApi.dal.DataAccessLayer;
 import com.example.guitarApi.dto.SigninRequest;
 import com.example.guitarApi.dto.SignupRequest;
+import com.example.guitarApi.exception.UnauthorizedException;
 import com.example.guitarApi.models.*;
 import com.example.guitarApi.security.JwtCore;
 import com.example.guitarApi.service.UserDetailsServiceImpl;
@@ -30,25 +31,24 @@ public class SecurityController {
     private final UserDetailsServiceImpl userService;
     private final DataAccessLayer dataAccessLayer;
     private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
-    public void someMethod() {
-        logger.debug("Debug message");
-//        logger.info("Info message");
-        logger.warn("Warning message");
-        logger.error("Error message");
-    }
+    private static final Logger errorLogger = LoggerFactory.getLogger("ERROR_LOGGER");
+
     @Autowired
     public SecurityController(UserDetailsServiceImpl userService, DataAccessLayer dataAccessLayer) {
         this.userService = userService;
         this.dataAccessLayer = dataAccessLayer;
     }
+
     @Autowired
     private JwtCore jwtCore;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @PostMapping("/signup")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @CrossOrigin(origins = "http://localhost:3000")
-    ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
         signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         signupRequest.setRoles(Set.of("ROLE_USER"));
         String serviceResult = userService.newUser(signupRequest);
@@ -63,19 +63,19 @@ public class SecurityController {
 
     @PostMapping("/signin")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-     @CrossOrigin(origins = "http://localhost:3000")
-    ResponseEntity<?> signin(@RequestBody SigninRequest signinRequest) {
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<?> signin(@RequestBody SigninRequest signinRequest) {
         UserDetails user = userService.loadUserByUsername(signinRequest.getUserName());
-//        String hashedPassword = passwordEncoder.encode(signinRequest.getPassword());       // Сравниваем хешированный пароль из запроса с хешированным паролем пользователя из базы данных
-        if (Objects.equals(user, null) || !passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
-            log.info("Ошибка авторизации пользователя " + signinRequest.getUserName());
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        if (user == null || !passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
+            logger.info("Ошибка авторизации пользователя " + signinRequest.getUserName());
+            throw new UnauthorizedException("Ошибка авторизации пользователя " + signinRequest.getUserName());
         }
         String jwt = jwtCore.generateToken(user);
         GuitarApiApplication.currentUser = userService.loadUserEntityByUsername(signinRequest.getUserName());
-        log.info("Вход прошёл успешно");
+        logger.info("Вход прошёл успешно");
         return ResponseEntity.ok(jwt);
     }
+
     @DeleteMapping("/delete/baskets/{userId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteBasketsByUserId(@PathVariable("userId") long userId) {
@@ -85,70 +85,73 @@ public class SecurityController {
 
     @PostMapping("/create/review")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity createReview(@RequestBody Review review){
+    public ResponseEntity<String> createReview(@RequestBody Review review) {
         dataAccessLayer.createReview(review);
         return ResponseEntity.ok("Review added successfully!");
     }
+
     @DeleteMapping("/delete/review/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity deleteReviewById(@PathVariable("id") long id){
+    public ResponseEntity<String> deleteReviewById(@PathVariable("id") long id) {
         dataAccessLayer.deleteReviewById(id);
         return ResponseEntity.ok("Review deleted successfully!");
     }
+
     @PutMapping("/update/review/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity updateReviewById(@PathVariable("id") long id, @RequestBody Review updatedReview){
+    public ResponseEntity<String> updateReviewById(@PathVariable("id") long id, @RequestBody Review updatedReview) {
         dataAccessLayer.updateReview(id, updatedReview);
         return ResponseEntity.ok("Review updated successfully!");
     }
-//    @PostMapping("/create/order")
-//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//    public ResponseEntity createOreder(@RequestBody Order order){
-//        dataAccessLayer.createOrder(order);
-//        return ResponseEntity.ok("Order added successfully!");
-//    }
-@PostMapping("/create/order/{userId}")
-public Order createOrder(@PathVariable("userId") long userId) {
-    List<Basket> baskets = dataAccessLayer.getBasketsByUserId(userId);
-    Order order = new Order();
-    for (Basket basket : baskets) {
-        basket.setOrder(order);
+
+    @PostMapping("/create/order/{userId}")
+    public Order createOrder(@PathVariable("userId") long userId) {
+        List<Basket> baskets = dataAccessLayer.getBasketsByUserId(userId);
+        Order order = new Order();
+        for (Basket basket : baskets) {
+            basket.setOrder(order);
+        }
+        order.setBaskets(baskets);
+        dataAccessLayer.createOrder(order);
+        return order;
     }
-    order.setBaskets(baskets);
-    dataAccessLayer.createOrder(order);
-    return order;
-}
+
     @DeleteMapping("/delete/order/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity deleteOrderById(@PathVariable("id") long id){
+    public ResponseEntity<String> deleteOrderById(@PathVariable("id") long id) {
         dataAccessLayer.deleteOrderById(id);
         return ResponseEntity.ok("Order deleted successfully!");
     }
+
     @PostMapping("/create/basket")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity createUser(@RequestBody Basket basket){
+    public ResponseEntity<String> createUser(@RequestBody Basket basket) {
         dataAccessLayer.createBasket(basket);
         return ResponseEntity.ok("Basket added successfully!");
     }
+
     @GetMapping("/get/user/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity getUserById(@PathVariable("id") long id){
+    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
         return ResponseEntity.ok(dataAccessLayer.getUserById(id));
     }
+
     @GetMapping("/get/baskets/{userId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Basket>> getBasketsByUserId(@PathVariable("userId") long userId) {
         return ResponseEntity.ok(dataAccessLayer.getBasketsByUserId(userId));
     }
+
     @PutMapping("/update/user/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity updateUserById(@PathVariable("id") long id, @RequestBody User updatedUser){
+    public ResponseEntity<String> updateUserById(@PathVariable("id") long id, @RequestBody User updatedUser) {
         dataAccessLayer.updateUser(id, updatedUser);
         return ResponseEntity.ok("User updated successfully!");
     }
+
     @GetMapping("/get/order/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity getOrderById(@PathVariable("id") long id){
+    public ResponseEntity<Order> getOrderById(@PathVariable("id") long id) {
         return ResponseEntity.ok(dataAccessLayer.getOrderById(id));
     }
 }
