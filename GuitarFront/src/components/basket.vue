@@ -5,11 +5,12 @@
       <p>Your basket is empty.</p>
     </div>
     <div v-else>
-      <div class="basket-item" v-for="item in basketItems" :key="item.id">
-        <img :src="item.image" :alt="item.name">
+      <div class="basket-item" v-for="(item, index) in basketItems" :key="index">
         <div>
-          <h3>{{ item.name }}</h3>
-          <p>Price: {{ item.price }}</p>
+          <h3>{{ item.product.name }}</h3>
+          <p>Company: {{ item.product.company }}</p>
+          <p>Price: {{ item.product.price }}</p>
+          <p>Description: {{ item.product.description }}</p>
         </div>
       </div>
     </div>
@@ -17,47 +18,45 @@
 </template>
 
 <script>
+  import Api from '@/api.js';
+import jwt_decode from 'vue-jwt-decode';
+
 export default {
   data() {
     return {
-      basketItems: [] // Здесь будут данные о товарах в корзине
+      basketItems: [],
+      userId: null
     };
   },
   created() {
-    this.loadBasketItems();
-
-    // Слушаем событие о добавлении товара в корзину
-    this.$root.$on('add-to-basket', this.addToBasket);
-  },
-  destroyed() {
-    // Убираем слушателя при уничтожении компонента
-    this.$root.$off('add-to-basket', this.addToBasket);
+    this.initializeUserId();
   },
   methods: {
-    // ...
-    addToBasket(product) {
-      this.basketItems.push(product); // Добавляем товар в корзину
+    initializeUserId() {
+      const token = this.$cookies.get('jwt');
+      if (token) {
+        const decodedToken = jwt_decode.decode(token);
+        if (decodedToken && decodedToken.id) {
+          this.userId = decodedToken.id;
+          console.log('User ID:', this.userId);
+          this.loadBasketItems();
+        } else {
+          console.log('Invalid token');
+        }
+      } else {
+        console.log('Token not found');
+      }
     },
-    // ...
+    async loadBasketItems() {
+      try {
+        const response = await Api.get(`secured/get/baskets/${this.userId}`);
+        this.basketItems = response.data;
+      } catch (error) {
+        console.error('Failed to load basket items:', error);
+      }
+    }
   }
 }
 </script>
-
-<style scoped>
-/* Стили для страницы корзины */
-.basket-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.basket-item img {
-  width: 100px;
-  height: 100px;
-  margin-right: 20px;
-}
-
-.basket-item div {
-  flex: 1;
-}
+<style>
 </style>

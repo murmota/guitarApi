@@ -37,3 +37,5 @@ out/
 .vscode/
 /logs/myapp.log
 /logs/error-report.log
+/logs/error-report.2024-06-05.log
+/logs/myapp.2024-06-05.log
