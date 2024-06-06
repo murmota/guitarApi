@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -18,17 +20,22 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
     private String password;
     private String phoneNumber;
+    private Set<String> roles;
     public static UserDetailsImpl build(User user){
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUserName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getPhoneNumber());
+                user.getPhoneNumber(),
+                user.getRoles());
+
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList());
     }
 
     @Override
