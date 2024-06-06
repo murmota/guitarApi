@@ -1,5 +1,9 @@
 <template>
     <div>
+        <nav>
+        <router-link to="/basket">Basket</router-link>
+        <router-link to="/home">Home</router-link>
+        </nav>
         <h2>Order Details</h2>
         <div v-if="!order">
             <p>Loading...</p>
@@ -53,3 +57,10 @@ export default {
     }
 };
 </script>
+<style scoped>
+nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+</style>

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <nav>
+      <router-link to="/home">Home</router-link>
+    </nav>
     <h2>Your Basket</h2>
     <div v-if="basketItems.length === 0">
       <p>Your basket is empty.</p>
@@ -62,7 +65,8 @@ export default {
         const response = await Api.post(`secured/create/order/${userId}`);
         const order = response.data;
         console.log('Order ID:', order.id);
-        this.$router.push( { orderId: order.id } );
+        // this.$router.push( { id: order.id }  );
+        this.$router.push(`/order/${order.id}`);
     } catch (error) {
         console.error('Failed to create order:', error);
     }
@@ -82,5 +86,10 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>
