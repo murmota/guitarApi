@@ -149,9 +149,15 @@ public class SecurityController {
         return ResponseEntity.ok("User updated successfully!");
     }
 
-    @GetMapping("/get/order/{id}")
+    @GetMapping("/secured/get/order/{orderId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Order> getOrderById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(dataAccessLayer.getOrderById(id));
+    public ResponseEntity<Order> getOrderById(@PathVariable("orderId") long orderId) {
+        Order order = dataAccessLayer.getOrderById(orderId);
+        if (order != null) {
+            return ResponseEntity.ok(order);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
+
 }

@@ -13,12 +13,13 @@
           <p>Description: {{ item.product.description }}</p>
         </div>
       </div>
+      <button @click="createOrder">Оформить заказ</button>
     </div>
   </div>
 </template>
 
 <script>
-  import Api from '@/api.js';
+import Api from '@/api.js';
 import jwt_decode from 'vue-jwt-decode';
 
 export default {
@@ -54,9 +55,29 @@ export default {
       } catch (error) {
         console.error('Failed to load basket items:', error);
       }
+    },
+    async createOrder() {
+      try {
+        const response = await Api.post(`secured/create/order/${this.userId}`);
+        const orderId = response.data.id;
+        this.$router.push(`/order/${orderId}`);
+      } catch (error) {
+        console.error('Failed to create order:', error);
+      }
     }
   }
 }
 </script>
-<style>
+
+<style scoped>
+.basket-item {
+  margin-bottom: 20px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
 </style>

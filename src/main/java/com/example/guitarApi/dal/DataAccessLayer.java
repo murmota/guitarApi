@@ -252,12 +252,13 @@ public class DataAccessLayer {
     public void createOrder(Order order){
         session = sessionFactory.openSession();
         session.beginTransaction();
+        order.setStatus(false);
         session.merge(order);
         session.getTransaction().commit();
         if (session != null) {
             session.close();
         }
-        //        order.setStatus(false);
+
     }
 
 
@@ -283,16 +284,17 @@ public class DataAccessLayer {
             session.close();
         }
     }
-    public Order getOrderById(Long id){
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-        Order order = session.get(Order.class, id);
-        session.getTransaction().commit();
-        if (session != null) {
+    public Order getOrderById(Long orderId) {
+        Session session = sessionFactory.openSession();
+        try {
+            return session.createQuery("SELECT o FROM Order o LEFT JOIN FETCH o.baskets WHERE o.id = :orderId", Order.class)
+                    .setParameter("orderId", orderId)
+                    .uniqueResult();
+        } finally {
             session.close();
         }
-        return order;
     }
+
     public List<Order> getOrders(){
         session = sessionFactory.openSession();
         session.getTransaction().begin();

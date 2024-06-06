@@ -11,8 +11,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    @Column(name = "Status")
-//    private boolean status;
+    @Column(name = "Status")
+    private boolean status;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Basket> baskets;
 }
