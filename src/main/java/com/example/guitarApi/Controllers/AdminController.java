@@ -123,10 +123,5 @@ public class AdminController {
         dataAccessLayer.updatePoint(id, updatedPoint);
         return ResponseEntity.ok("Point updated successfully!");
     }
-    @PutMapping("/update/order/{id}")
-    public ResponseEntity updateOrderById(@PathVariable("id") long id, @RequestBody Order updatedOrder){
-        dataAccessLayer.updateOrder(id, updatedOrder);
-        return ResponseEntity.ok("Order updated successfully!");
-    }
 
 }

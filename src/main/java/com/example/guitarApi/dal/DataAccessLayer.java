@@ -168,7 +168,6 @@ public class DataAccessLayer {
             session.close();
         }
     }
-
     public void deleteBasketsByUserId(Long userId) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -181,7 +180,6 @@ public class DataAccessLayer {
         session.getTransaction().commit();
         session.close();
         }
-
     public List<Basket> getBaskets(){
         session = sessionFactory.openSession();
         session.getTransaction().begin();
@@ -250,126 +248,33 @@ public class DataAccessLayer {
         List<Discount> resultList = session.createQuery(query).getResultList();
         return resultList;
     }
-//    public void createOrder(Order order){
-//        session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        order.setStatus(false);
-//        session.merge(order);
-//        session.getTransaction().commit();
-//        if (session != null) {
-//            session.close();
-//        }
-//
-//    }
-//public void createOrder(Order order) {
-//    Session session = sessionFactory.openSession();
-//    try {
-//        session.beginTransaction();
-//        order.setStatus(false);
-//        order = (Order) session.merge(order); // Merge the order
-//        for (Basket basket : order.getBaskets()) {
-//            basket.setOrder(order);
-//            session.merge(basket); // Merge each basket
-//        }
-//        session.getTransaction().commit();
-//    } finally {
-//        if (session != null) {
-//            session.close();
-//        }
-//    }
-//}
-//public void createOrder(Order order) {
-//    Session session = sessionFactory.openSession();
-//    try {
-//        session.beginTransaction();
-//        order.setStatus(false);
-//        Order managedOrder = (Order) session.merge(order);
-//        for (Basket basket : managedOrder.getBaskets()) {
-//            basket.setOrder(managedOrder);
-//            session.merge(basket);
-//        }
-//        session.getTransaction().commit();
-//    } finally {
-//        if (session != null) {
-//            session.close();
-//        }
-//    }
-//}
-//public Order createOrderWithBasketItems(Long userId) {
-//    Session session = sessionFactory.openSession();
-//    session.beginTransaction();
-//    Order order = new Order();
-//    order.setStatus(false);
-//    List<Basket> baskets = session.createQuery("SELECT b FROM Basket b WHERE b.user.id = :userId", Basket.class)
-//            .setParameter("userId", userId)
-//            .getResultList();
-//    order.setBaskets(baskets);
-//    session.persist(order);
-//    for (Basket basket : baskets) {
-//        session.remove(basket);
-//    }
-//    session.getTransaction().commit();
-//    session.close();
-//
-//    return order;
-//}
 public Order createOrderWithBasketItems(Long userId) {
     Session session = sessionFactory.openSession();
     session.beginTransaction();
-
-    // Создаем новый заказ
     Order order = new Order();
     order.setStatus(false);
-
-    // Получаем корзину пользователя
     List<Basket> baskets = session.createQuery("SELECT b FROM Basket b WHERE b.user.id = :userId", Basket.class)
             .setParameter("userId", userId)
             .getResultList();
-
-    // Переносим товары из корзины в заказ
     for (Basket basket : baskets) {
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setProduct(basket.getProduct());
         order.getOrderItems().add(orderItem);
     }
-
-    // Сохраняем заказ
     session.save(order);
-
-    // Удаляем оригинальные объекты Basket
     for (Basket basket : baskets) {
         session.remove(basket);
     }
-
     session.getTransaction().commit();
     session.close();
-
     return order;
 }
-
-
-
-
-
-
     public void deleteOrderById(Long id){
         session = sessionFactory.openSession();
         session.beginTransaction();
         Order order = session.get(Order.class, id);
         session.remove(id);
-        session.getTransaction().commit();
-        if (session != null) {
-            session.close();
-        }
-    }
-    public void updateOrder(Long id, Order updatedorder){
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-        Order order = session.get(Order.class, id);
-//        order.setBasket(updatedorder.getBasket());
-//        order.setStatus(updatedorder.isStatus());
-        session.merge(order);
         session.getTransaction().commit();
         if (session != null) {
             session.close();
@@ -385,8 +290,6 @@ public Order createOrderWithBasketItems(Long userId) {
             session.close();
         }
     }
-
-
     public List<Order> getOrders(){
         session = sessionFactory.openSession();
         session.getTransaction().begin();
@@ -463,20 +366,6 @@ public Order createOrderWithBasketItems(Long userId) {
         session.beginTransaction();
         Review review = session.get(Review.class, id);
         session.remove(id);
-        session.getTransaction().commit();
-        if (session != null) {
-            session.close();
-        }
-    }
-    public void updateReview(Long id, Review updatedReview){
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-        Review review = session.get(Review.class, id);
-        review.setProduct(updatedReview.getProduct());
-        review.setMark(updatedReview.getMark());
-        review.setContent(updatedReview.getContent());
-        review.setDate(updatedReview.getDate());
-        session.merge(review);
         session.getTransaction().commit();
         if (session != null) {
             session.close();

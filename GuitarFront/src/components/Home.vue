@@ -14,11 +14,6 @@
       <div class="product-card" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
         <h3>{{ product.name }}</h3>
         <p>{{ product.price }}</p>
-        <!-- <div class="quantity-control">
-          <button @click.stop="decreaseQuantity(product.id)">-</button>
-          <span>{{ quantities[product.id] || 1 }}</span>
-          <button @click.stop="increaseQuantity(product.id)">+</button>
-        </div> -->
         <button @click.stop="addToBasket(product)">Add to Basket</button>
       </div>
     </main>

@@ -29,7 +29,7 @@ public class JwtCore {
                 .claim("username", userDetails.getUsername())
                 .claim("email", ((UserDetailsImpl) userDetails).getEmail())
                 .claim("phoneNumber", ((UserDetailsImpl) userDetails).getPhoneNumber())
-                .claim("roles", getRoles(userDetails)) // Добавляем роли в токен
+                .claim("roles", getRoles(userDetails))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date().getTime() + lifetime)))
                 .signWith(SignatureAlgorithm.HS256, secret)

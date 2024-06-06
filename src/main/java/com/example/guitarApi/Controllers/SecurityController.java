@@ -76,66 +76,42 @@ public class SecurityController {
         logger.info("Вход прошёл успешно");
         return ResponseEntity.ok(jwt);
     }
-
     @DeleteMapping("/delete/baskets/{userId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteBasketsByUserId(@PathVariable("userId") long userId) {
         dataAccessLayer.deleteBasketsByUserId(userId);
         return ResponseEntity.ok("baskets");
     }
-
     @PostMapping("/create/review")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> createReview(@RequestBody Review review) {
         dataAccessLayer.createReview(review);
         return ResponseEntity.ok("Review added successfully!");
     }
-
     @DeleteMapping("/delete/review/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteReviewById(@PathVariable("id") long id) {
         dataAccessLayer.deleteReviewById(id);
         return ResponseEntity.ok("Review deleted successfully!");
     }
-
-    @PutMapping("/update/review/{id}")
+    @PostMapping("/create/order/{userId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> updateReviewById(@PathVariable("id") long id, @RequestBody Review updatedReview) {
-        dataAccessLayer.updateReview(id, updatedReview);
-        return ResponseEntity.ok("Review updated successfully!");
+    public ResponseEntity<Order> createOrder(@PathVariable("userId") long userId) {
+        Order order = dataAccessLayer.createOrderWithBasketItems(userId);
+        return ResponseEntity.ok(order);
     }
-
-//    @PostMapping("/create/order/{userId}")
-//    public Order createOrder(@PathVariable("userId") long userId) {
-//        List<Basket> baskets = dataAccessLayer.getBasketsByUserId(userId);
-//        Order order = new Order();
-//        order.setBaskets(baskets);
-//        for (Basket basket : baskets) {
-//            basket.setOrder(order);
-//        }
-//        dataAccessLayer.createOrder(order);
-//        return order;
-//    }
-@PostMapping("/create/order/{userId}")
-@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-public ResponseEntity<Order> createOrder(@PathVariable("userId") long userId) {
-    Order order = dataAccessLayer.createOrderWithBasketItems(userId);
-    return ResponseEntity.ok(order);
-}
-
     @DeleteMapping("/delete/order/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteOrderById(@PathVariable("id") long id) {
-        dataAccessLayer.deleteOrderById(id);
-        return ResponseEntity.ok("Order deleted successfully!");
+            dataAccessLayer.deleteOrderById(id);
+            return ResponseEntity.ok("Order deleted successfully!");
     }
-
-        @PostMapping("/create/basket")
-        @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-        public ResponseEntity<String> createUser(@RequestBody Basket basket) {
+    @PostMapping("/create/basket")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> createUser(@RequestBody Basket basket) {
             dataAccessLayer.createBasket(basket);
             return ResponseEntity.ok("Basket added successfully!");
-        }
+    }
 
     @GetMapping("/get/user/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

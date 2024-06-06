@@ -15,7 +15,6 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final DataAccessLayer dataAccessLayer;
-
     @Autowired
     public UserDetailsServiceImpl(DataAccessLayer dataAccessLayer) {
         this.dataAccessLayer = dataAccessLayer;
