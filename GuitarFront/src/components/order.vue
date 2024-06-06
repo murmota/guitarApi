@@ -11,13 +11,18 @@
           <h4>Items:</h4>
           <ul>
             <li v-for="(item, index) in order.baskets" :key="index">
-              {{ item.product.name }} - {{ item.product.company }} - ${{ item.product.price }}
+              <template v-if="item.product">
+                {{ item.product.name }} - {{ item.product.company }} - ${{ item.product.price }}
+              </template>
+              <template v-else>
+                Product information not available
+              </template>
             </li>
           </ul>
         </div>
       </div>
     </div>
-  </template>
+</template>
   
   <script>
   import Api from '@/api.js';
@@ -32,15 +37,33 @@
       this.loadOrder();
     },
     methods: {
-      async loadOrder() {
-        const orderId = this.$route.params.orderId;
-        try {
-          const response = await Api.get(`secured/get/order/${orderId}`);
-          this.order = response.data;
-        } catch (error) {
-          console.error('Failed to load order:', error);
-        }
+    //   async loadOrder() {
+    //     const orderId = this.$route.params.orderId;
+    //     try {
+    //       const response = await Api.get(`secured/get/order/${orderId}`);
+    //       this.order = response.data;
+    //     } catch (error) {
+    //       console.error('Failed to load order:', error);
+    //     }
+    //   }
+    async loadOrder() {
+  const orderId = this.$route.params.orderId;
+  try {
+    const response = await Api.get(`secured/get/order/${orderId}`);
+    this.order = response.data;
+    
+    // Проверяем каждый элемент корзины
+    this.order.baskets.forEach(item => {
+      // Если order_id равен null, то устанавливаем для продукта пустой объект
+      if (item.order_id === null) {
+        item.product = null;
       }
+    });
+  } catch (error) {
+    console.error('Failed to load order:', error);
+  }
+}
+
     }
   }
   </script>

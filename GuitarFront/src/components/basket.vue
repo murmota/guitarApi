@@ -49,22 +49,36 @@ export default {
       }
     },
     async loadBasketItems() {
-      try {
-        const response = await Api.get(`secured/get/baskets/${this.userId}`);
-        this.basketItems = response.data;
-      } catch (error) {
-        console.error('Failed to load basket items:', error);
-      }
-    },
-    async createOrder() {
-      try {
-        const response = await Api.post(`secured/create/order/${this.userId}`);
-        const orderId = response.data.id;
-        this.$router.push(`/order/${orderId}`);
-      } catch (error) {
-        console.error('Failed to create order:', error);
-      }
-    }
+  try {
+    const response = await Api.get(`secured/get/baskets/${this.userId}`);
+    this.basketItems = response.data.filter(item => item.product); // Фильтруем элементы без информации о продукте
+  } catch (error) {
+    console.error('Failed to load basket items:', error);
+  }
+},
+async createOrder() {
+  try {
+    const response = await Api.post(`secured/create/order/${this.userId}`);
+    const orderId = response.data.id;
+    // Очищаем корзину после успешного создания заказа
+    await this.clearBasket();
+    // Переходим на страницу заказа
+    this.$router.push(`/order/${orderId}`);
+  } catch (error) {
+    console.error('Failed to create order:', error);
+  }
+},
+async clearBasket() {
+  try {
+    // Выполняем запрос на удаление корзины пользователя
+    await Api.delete(`secured/delete/baskets/${this.userId}`);
+    // Обновляем список товаров в корзине на фронтенде
+    this.basketItems = [];
+    console.log('Basket cleared successfully');
+  } catch (error) {
+    console.error('Failed to clear basket:', error);
+  }
+}
   }
 }
 </script>

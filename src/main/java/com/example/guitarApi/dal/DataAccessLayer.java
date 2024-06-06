@@ -249,17 +249,56 @@ public class DataAccessLayer {
         List<Discount> resultList = session.createQuery(query).getResultList();
         return resultList;
     }
-    public void createOrder(Order order){
-        session = sessionFactory.openSession();
+//    public void createOrder(Order order){
+//        session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        order.setStatus(false);
+//        session.merge(order);
+//        session.getTransaction().commit();
+//        if (session != null) {
+//            session.close();
+//        }
+//
+//    }
+//public void createOrder(Order order) {
+//    Session session = sessionFactory.openSession();
+//    try {
+//        session.beginTransaction();
+//        order.setStatus(false);
+//        order = (Order) session.merge(order); // Merge the order
+//        for (Basket basket : order.getBaskets()) {
+//            basket.setOrder(order);
+//            session.merge(basket); // Merge each basket
+//        }
+//        session.getTransaction().commit();
+//    } finally {
+//        if (session != null) {
+//            session.close();
+//        }
+//    }
+//}
+public void createOrder(Order order) {
+    Session session = sessionFactory.openSession();
+    try {
         session.beginTransaction();
         order.setStatus(false);
-        session.merge(order);
+        // Сначала объединяем заказ, чтобы он стал управляемым
+        Order managedOrder = (Order) session.merge(order);
+        // Убедимся, что все корзины правильно ассоциированы с управляемым заказом
+        for (Basket basket : managedOrder.getBaskets()) {
+            basket.setOrder(managedOrder);
+            session.merge(basket); // Объединяем каждую корзину, чтобы они стали управляемыми
+        }
         session.getTransaction().commit();
+    } finally {
         if (session != null) {
             session.close();
         }
-
     }
+}
+
+
+
 
 
     public void deleteOrderById(Long id){
@@ -294,6 +333,7 @@ public class DataAccessLayer {
             session.close();
         }
     }
+
 
     public List<Order> getOrders(){
         session = sessionFactory.openSession();

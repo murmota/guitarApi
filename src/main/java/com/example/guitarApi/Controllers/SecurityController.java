@@ -8,6 +8,7 @@ import com.example.guitarApi.exception.UnauthorizedException;
 import com.example.guitarApi.models.*;
 import com.example.guitarApi.security.JwtCore;
 import com.example.guitarApi.service.UserDetailsServiceImpl;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -108,10 +109,10 @@ public class SecurityController {
     public Order createOrder(@PathVariable("userId") long userId) {
         List<Basket> baskets = dataAccessLayer.getBasketsByUserId(userId);
         Order order = new Order();
+        order.setBaskets(baskets);
         for (Basket basket : baskets) {
             basket.setOrder(order);
         }
-        order.setBaskets(baskets);
         dataAccessLayer.createOrder(order);
         return order;
     }
@@ -123,12 +124,12 @@ public class SecurityController {
         return ResponseEntity.ok("Order deleted successfully!");
     }
 
-    @PostMapping("/create/basket")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> createUser(@RequestBody Basket basket) {
-        dataAccessLayer.createBasket(basket);
-        return ResponseEntity.ok("Basket added successfully!");
-    }
+        @PostMapping("/create/basket")
+        @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+        public ResponseEntity<String> createUser(@RequestBody Basket basket) {
+            dataAccessLayer.createBasket(basket);
+            return ResponseEntity.ok("Basket added successfully!");
+        }
 
     @GetMapping("/get/user/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
@@ -149,8 +150,9 @@ public class SecurityController {
         return ResponseEntity.ok("User updated successfully!");
     }
 
-    @GetMapping("/secured/get/order/{orderId}")
+    @GetMapping("/get/order/{orderId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @Transactional
     public ResponseEntity<Order> getOrderById(@PathVariable("orderId") long orderId) {
         Order order = dataAccessLayer.getOrderById(orderId);
         if (order != null) {
