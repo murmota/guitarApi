@@ -39,7 +39,6 @@ export default {
   data() {
     return {
       products: [],
-      // quantities: {} // Счетчики для каждого продукта
     };
   },
   mounted() {
