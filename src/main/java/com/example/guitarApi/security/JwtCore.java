@@ -5,8 +5,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtCore {
@@ -14,14 +17,19 @@ public class JwtCore {
     private String secret;
     @Value("${guitarApi.app.lifetime}")
     private int lifetime;
-
-    public String generateToken(UserDetails userDetails){
+    private List<String> getRoles(UserDetails userDetails) {
+        return userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+    }
+    public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("id", ((UserDetailsImpl) userDetails).getId())
                 .claim("username", userDetails.getUsername())
                 .claim("email", ((UserDetailsImpl) userDetails).getEmail())
                 .claim("phoneNumber", ((UserDetailsImpl) userDetails).getPhoneNumber())
+                .claim("roles", getRoles(userDetails)) // Добавляем роли в токен
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date().getTime() + lifetime)))
                 .signWith(SignatureAlgorithm.HS256, secret)

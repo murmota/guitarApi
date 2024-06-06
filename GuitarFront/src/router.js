@@ -6,6 +6,7 @@ import Product from './components/product.vue';
 import Home from './components/home.vue';
 import Profile from './components/Profile.vue';
 import Order from './components/order.vue';
+import Admin from './components/Admin.vue';
 
 export default createRouter({ 
   history: createWebHistory(), 
@@ -16,6 +17,7 @@ export default createRouter({
     { path: '/basket', component: Basket },
     { path: '/home', component: Home },
     { path: '/product/:id', component: Product },
-    { path: '/order/:orderId', component: Order }
+    { path: '/order/:orderId', component: Order },
+    {path: '/admin', component: Admin }
   ], 
 });
