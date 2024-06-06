@@ -105,17 +105,23 @@ public class SecurityController {
         return ResponseEntity.ok("Review updated successfully!");
     }
 
-    @PostMapping("/create/order/{userId}")
-    public Order createOrder(@PathVariable("userId") long userId) {
-        List<Basket> baskets = dataAccessLayer.getBasketsByUserId(userId);
-        Order order = new Order();
-        order.setBaskets(baskets);
-        for (Basket basket : baskets) {
-            basket.setOrder(order);
-        }
-        dataAccessLayer.createOrder(order);
-        return order;
-    }
+//    @PostMapping("/create/order/{userId}")
+//    public Order createOrder(@PathVariable("userId") long userId) {
+//        List<Basket> baskets = dataAccessLayer.getBasketsByUserId(userId);
+//        Order order = new Order();
+//        order.setBaskets(baskets);
+//        for (Basket basket : baskets) {
+//            basket.setOrder(order);
+//        }
+//        dataAccessLayer.createOrder(order);
+//        return order;
+//    }
+@PostMapping("/create/order/{userId}")
+@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+public ResponseEntity<Order> createOrder(@PathVariable("userId") long userId) {
+    Order order = dataAccessLayer.createOrderWithBasketItems(userId);
+    return ResponseEntity.ok(order);
+}
 
     @DeleteMapping("/delete/order/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
@@ -152,14 +158,9 @@ public class SecurityController {
 
     @GetMapping("/get/order/{orderId}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @Transactional
-    public ResponseEntity<Order> getOrderById(@PathVariable("orderId") long orderId) {
+    public ResponseEntity<Order> getOrderById(@PathVariable("orderId") Long orderId) {
         Order order = dataAccessLayer.getOrderById(orderId);
-        if (order != null) {
-            return ResponseEntity.ok(order);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok(order);
     }
 
 }

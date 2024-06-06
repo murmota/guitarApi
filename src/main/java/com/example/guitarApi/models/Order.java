@@ -1,7 +1,9 @@
 package com.example.guitarApi.models;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,8 +13,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "Status")
+
     private boolean status;
+
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Basket> baskets;
+    @JsonManagedReference
+    private List<OrderItem> orderItems = new ArrayList<>();
 }

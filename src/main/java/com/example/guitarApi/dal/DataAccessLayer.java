@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 @Getter
 public class DataAccessLayer {
@@ -277,25 +278,76 @@ public class DataAccessLayer {
 //        }
 //    }
 //}
-public void createOrder(Order order) {
+//public void createOrder(Order order) {
+//    Session session = sessionFactory.openSession();
+//    try {
+//        session.beginTransaction();
+//        order.setStatus(false);
+//        Order managedOrder = (Order) session.merge(order);
+//        for (Basket basket : managedOrder.getBaskets()) {
+//            basket.setOrder(managedOrder);
+//            session.merge(basket);
+//        }
+//        session.getTransaction().commit();
+//    } finally {
+//        if (session != null) {
+//            session.close();
+//        }
+//    }
+//}
+//public Order createOrderWithBasketItems(Long userId) {
+//    Session session = sessionFactory.openSession();
+//    session.beginTransaction();
+//    Order order = new Order();
+//    order.setStatus(false);
+//    List<Basket> baskets = session.createQuery("SELECT b FROM Basket b WHERE b.user.id = :userId", Basket.class)
+//            .setParameter("userId", userId)
+//            .getResultList();
+//    order.setBaskets(baskets);
+//    session.persist(order);
+//    for (Basket basket : baskets) {
+//        session.remove(basket);
+//    }
+//    session.getTransaction().commit();
+//    session.close();
+//
+//    return order;
+//}
+public Order createOrderWithBasketItems(Long userId) {
     Session session = sessionFactory.openSession();
-    try {
-        session.beginTransaction();
-        order.setStatus(false);
-        // Сначала объединяем заказ, чтобы он стал управляемым
-        Order managedOrder = (Order) session.merge(order);
-        // Убедимся, что все корзины правильно ассоциированы с управляемым заказом
-        for (Basket basket : managedOrder.getBaskets()) {
-            basket.setOrder(managedOrder);
-            session.merge(basket); // Объединяем каждую корзину, чтобы они стали управляемыми
-        }
-        session.getTransaction().commit();
-    } finally {
-        if (session != null) {
-            session.close();
-        }
+    session.beginTransaction();
+
+    // Создаем новый заказ
+    Order order = new Order();
+    order.setStatus(false);
+
+    // Получаем корзину пользователя
+    List<Basket> baskets = session.createQuery("SELECT b FROM Basket b WHERE b.user.id = :userId", Basket.class)
+            .setParameter("userId", userId)
+            .getResultList();
+
+    // Переносим товары из корзины в заказ
+    for (Basket basket : baskets) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setProduct(basket.getProduct());
+        order.getOrderItems().add(orderItem);
     }
+
+    // Сохраняем заказ
+    session.save(order);
+
+    // Удаляем оригинальные объекты Basket
+    for (Basket basket : baskets) {
+        session.remove(basket);
+    }
+
+    session.getTransaction().commit();
+    session.close();
+
+    return order;
 }
+
 
 
 
@@ -326,7 +378,7 @@ public void createOrder(Order order) {
     public Order getOrderById(Long orderId) {
         Session session = sessionFactory.openSession();
         try {
-            return session.createQuery("SELECT o FROM Order o LEFT JOIN FETCH o.baskets WHERE o.id = :orderId", Order.class)
+            return session.createQuery("SELECT o FROM Order o LEFT JOIN FETCH o.orderItems WHERE o.id = :orderId", Order.class)
                     .setParameter("orderId", orderId)
                     .uniqueResult();
         } finally {
