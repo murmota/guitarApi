@@ -12,7 +12,7 @@
 
 <script>
 import Api from '@/api.js';
-import jwt_decode from 'vue-jwt-decode';
+// import jwt_decode from 'jwt-decode'; // для декодирования JWT
 
 export default {
   data() {
