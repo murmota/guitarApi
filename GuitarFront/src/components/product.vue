@@ -36,7 +36,7 @@ export default {
           }
         })
         .then(response => {
-          this.product = response.data; // Предполагается, что API возвращает объект с полями name, company, articule, price и description
+          this.product = response.data;
         });
       } catch (error) {
         console.error("There was an error fetching the product:", error);
@@ -47,5 +47,4 @@ export default {
 </script>
 
 <style>
-/* Стили для страницы товара */
 </style>

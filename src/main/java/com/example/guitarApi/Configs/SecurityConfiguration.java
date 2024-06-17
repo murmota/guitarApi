@@ -58,6 +58,5 @@ public class SecurityConfiguration {
                         .anyRequest().permitAll())
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-//        .hasAnyRole("USER", "ADMIN")
     }
 }

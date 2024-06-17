@@ -5,7 +5,6 @@
       <p><strong>Username:</strong> {{ user }}</p>
       <p><strong>Email:</strong> {{ email }}</p>
       <button class="b_logout" @click="logOut">Выйти из аккаунта</button>
-      <!-- Другие данные профиля -->
     </div>
     <div v-else>
       <p>You are unauthorized</p>
@@ -30,7 +29,7 @@ export default {
     if (token) {
       const decodedToken = jwt_decode.decode(token);
       if (decodedToken) {
-        console.log('Decoded token:', decodedToken); // Вывод всей информации о пользователе
+        console.log('Decoded token:', decodedToken);
         const userId = decodedToken.id;
         Api.get('/secured/get/user/' + userId, {
           headers: {
@@ -61,5 +60,4 @@ export default {
 </script>
 
 <style scoped>
-/* Ваши стили здесь */
 </style>

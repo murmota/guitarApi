@@ -12,7 +12,6 @@
 
 <script>
 import Api from '@/api.js';
-// import jwt_decode from 'jwt-decode'; // для декодирования JWT
 
 export default {
   data() {
@@ -35,14 +34,11 @@ export default {
           this.$cookies.remove('jwt');
           this.$cookies.set('jwt', this.jwt, '1h');
           
-          // Раскодируем JWT токен
           const tokenParts = this.jwt.split('.');
           const tokenPayload = JSON.parse(atob(tokenParts[1]));
-          
-          // Сохраняем токен и роли в Vuex
+
           this.$store.dispatch('login', { token: this.jwt, roles: tokenPayload.roles });
 
-          // Проверяем роль пользователя
           this.checkUserRole(tokenPayload.roles);
         })
         .catch(error => {
@@ -61,5 +57,4 @@ export default {
 </script>
 
 <style scoped>
-/* Ваши стили здесь */
 </style>

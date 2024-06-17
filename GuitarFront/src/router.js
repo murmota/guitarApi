@@ -7,7 +7,7 @@ import Home from './components/home.vue';
 import Profile from './components/Profile.vue';
 import Order from './components/order.vue';
 import Admin from './components/Admin.vue';
-import store from './store'; // Импортируйте Vuex store
+import store from './store';
 
 const routes = [
   { path: '/registration', component: Registration, alias: '/' },

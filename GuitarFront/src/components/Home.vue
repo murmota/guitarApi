@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Header -->
     <header>
       <h1>Welcome to our store!</h1>
       <nav>
@@ -9,7 +8,6 @@
         <router-link to="/Profile">Profile</router-link>
       </nav>
     </header>
-    <!-- Body - Product Cards -->
     <main>
       <div class="product-card" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
         <h3>{{ product.name }}</h3>
@@ -18,7 +16,6 @@
       </div>
     </main>
 
-    <!-- Footer -->
     <footer>
       <p>&copy; 2024 MyStore. All rights reserved.</p>
     </footer>
@@ -82,7 +79,6 @@ export default {
 </script>
 
 <style scoped>
-/* Стили для header, main и footer */
 header {
   background-color: #333;
   color: #fff;

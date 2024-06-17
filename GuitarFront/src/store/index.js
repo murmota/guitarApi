@@ -1,11 +1,10 @@
-// store/index.js
 import { createStore } from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
 const store = createStore({
   state: {
     token: null,
-    roles: []  // Массив ролей
+    roles: []  
   },
   getters: {
     isLoggedIn: state => !!state.token,

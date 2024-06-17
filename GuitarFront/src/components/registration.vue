@@ -39,11 +39,9 @@ export default {
       
       Api.post('/secured/signup', registerData)
         .then(response => {
-          // Обработка успешного ответа от сервера
           console.log('Registration successful!', response.data);
         })
         .catch(error => {
-          // Обработка ошибок
           console.error('Registration failed:', error.response.data);
         });
       
@@ -54,5 +52,5 @@ export default {
 </script>
 
 <style scoped>
-/* Ваши стили здесь */
+
 </style>

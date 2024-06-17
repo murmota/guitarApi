@@ -37,13 +37,11 @@
           phoneNumber: this.phoneNumber,
         }
         
-        Api.post('/admin/create', registerData)
+       Api.post('/admin/create', registerData)
           .then(response => {
-            // Обработка успешного ответа от сервера
             console.log('Registration successful!', response.data);
           })
           .catch(error => {
-            // Обработка ошибок
             console.error('Registration failed:', error.response.data);
           });
         
@@ -54,6 +52,5 @@
   </script>
   
   <style scoped>
-  /* Ваши стили здесь */
   </style>
   

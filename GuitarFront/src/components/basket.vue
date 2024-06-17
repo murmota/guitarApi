@@ -54,7 +54,7 @@ export default {
     async loadBasketItems() {
       try {
         const response = await Api.get(`secured/get/baskets/${this.userId}`);
-        this.basketItems = response.data.filter(item => item.product); // Фильтруем элементы без информации о продукте
+        this.basketItems = response.data.filter(item => item.product);
       } catch (error) {
         console.error('Failed to load basket items:', error);
       }
@@ -65,7 +65,6 @@ export default {
         const response = await Api.post(`secured/create/order/${userId}`);
         const order = response.data;
         console.log('Order ID:', order.id);
-        // this.$router.push( { id: order.id }  );
         this.$router.push(`/order/${order.id}`);
     } catch (error) {
         console.error('Failed to create order:', error);
